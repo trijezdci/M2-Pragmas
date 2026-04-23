@@ -1,1 +1,199 @@
+/* Pragma-Grammar -- EBNF Grammar for Modula-2 Pragmas.
+ *
+ * Copyright (c) 2026 The Modula-2 Software Foundation
+ *
+ * Author & Maintainer: Benjamin Kowarsch <org.m2sf>
+ *
+ * @synopsis
+ *
+ * This document describes the grammar of Modula-2 Pragmas in EBNF.
+ *
+ * @repository
+ *
+ * https://github.com/trijezdci/M2-Pragmas
+ *
+ * @file
+ *
+ * pragma-grammar.gll
+ *
+ * Grammar of Modula-2 pragmas.
+ *
+ */
 
+grammar pragmas;
+
+/* * *   R e s e r v e d   W o r d s   * * */
+
+reserved
+  ADDR, ...
+  ;
+
+/* * *   N o n - T e r m i n a l   S y m b o l s   * * */
+
+/* INLINE Pragma */
+
+inlinePragma := '<*' INLINE '*>' ;
+
+/* NOINLINE Pragma */
+
+noInlinePragma := '<*' NOINLINE '*>' ;
+
+
+/* DEPRECATED Pragma */
+
+deprecatedPragma := '<*' DEPRECATED '*>' ;
+
+
+/* PRIVATETO Pragma */
+
+privatetoPragma := '<*' PRIVATETO '=' identList '*>' ;
+
+
+/* FFI Pragma */
+
+ffiPragma := '<*' FFI '=' ( "C" | "CLR" | "JVM" ) '*>' ;
+
+
+/* FFIDENT Pragma */
+
+ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
+
+
+/* Implementation Defined Pragma */
+
+implDefPragma :=
+  '<*' ( implPrefix '.' )? pragmaSymbol ( '=' constExpr )? '|' ctMsgMode '*>' ;
+
+
+/* Compile Time Message Mode */
+
+.ctMsgMode := INFO | WARN | ERROR | FATAL ;
+
+/* Implementation Prefix and Pragma Symbol */
+
+implPrefix, pragmaSymbol = <implementation-defined> ;
+
+/* Implementation defined implPrefix and pragmaSymbol follow the syntax of StdIdent */
+
+
+/* * *   T e r m i n a l   S y m b o l s   * * */
+
+/* Identifier */
+
+StdIdent :=
+  Letter ( Letter | Digit )*
+  ;
+
+/* Letter Or Digit */
+
+.LetterOrDigit := Letter | Digit ;
+
+
+/* Qualified Identifier */
+
+Qualident :=
+  StdIdent ( '.' StdIdent )*
+  ;
+
+/* Number Literal */
+
+NumberLiteral := Digit+ ;
+
+Digit := "0" .. "9" ;
+
+
+/* String Literal */
+
+StringLiteral :=
+  SingleQuotedString | DoubleQuotedString
+  ;
+
+/* Single-Quoted String Literal */
+
+.SingleQuotedString :=
+  "'" ( QuotableCharacter | '"' )* "'"
+  ;
+
+/* Double-Quoted String Literal */
+
+.DoubleQuotedString :=
+  '"' ( QuotableCharacter | "'" )* '"'
+  ;
+
+/* Quotable Character */
+
+.QuotableCharacter :=
+  Digit | Letter | Space | NonAlphaNumQuotable | EscapedCharacter
+  ;
+
+/* Letter */
+
+.Letter := 'a' .. 'z' | 'A' .. 'Z' ;
+
+/* Whitespace */
+
+.Space := 0u20 ;
+
+/* Non-Alphanumeric Quotable Character */
+
+.NonAlphaNumQuotable :=
+  '!' | '#' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' |
+  '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' |
+  '[' | '\' | ']' | '^' | '_' | '`' | '{' | '|' | '}' | '~'
+  ;
+
+/* Escaped Character */
+
+.EscapedCharacter :=
+  '\' ( 'n' | 't' | '\' )
+  ;
+
+
+/* * *   I g n o r e   S y m b o l s   * * */
+
+/* Whitespace */
+
+Whitespace :=
+  Space | Tabulator
+  ;
+
+/* Tabulator */
+.Tabulator := 0u9 ;
+
+
+/* Line Comment */
+
+LineComment :=
+  '!' CommentCharacter* EndOfLine
+  ;
+
+
+/* Block Comment */
+
+BlockComment :=
+  '(*' ( CommentCharacter | BlockComment | EndOfLine )* '*)'
+  ;
+
+/* Comment Character */
+
+.CommentCharacter :=
+  Digit | Letter | Whitespace | NonAlphaNumQuotable | '\' | "'" | '"'
+  ; /* greedy */
+
+
+/* End of Line Marker */
+
+EndOfLine :=
+  LF | CR ( LF )?
+  ;
+
+/* ASCII LF */
+
+.LF := 0uA ;
+
+/* ASCII CR */
+
+.CR := 0uD ;
+
+
+end g.
