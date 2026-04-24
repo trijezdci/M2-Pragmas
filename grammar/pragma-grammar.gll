@@ -25,14 +25,31 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FALSE, FFI, FFIDENT, FORWARD,
-  GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT,
-  PADBITS, PURITY, PRESETS, PRIVATETO, SINGLEASSIGN, TEST, TRUE,
-  VOLATILE, WARN
+  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD, GENERATED,
+  INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
+  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE, WARN
   ;
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
 
+/* MSG Pragma */
+
+msgPragma :=
+  '<*' MSG '=' ( INFO | WARN | ERROR | FATAL ) ':'
+  msgComponent ( ',' msgComponent )* '*>'
+  ;
+
+msgComponent :=
+  String | constQualident | '$' valuePragmaDenoter | '?' pragmaDenoter
+
+.valuePragmaDenoter := ALIGN | ENCODING ;
+
+.pragmaDenoter :=
+  ADDR, ALIGN, DEPRECATED, ENCODING, FFI, FFIDENT, FORWARD, GENERATED, INLINE,
+  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
+  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE
+  ;
+ 
 /* INLINE Pragma */
 
 inlinePragma := '<*' INLINE '*>' ;
@@ -41,11 +58,29 @@ inlinePragma := '<*' INLINE '*>' ;
 
 noInlinePragma := '<*' NOINLINE '*>' ;
 
+/* OUT Pragma */
 
-/* DEPRECATED Pragma */
+outPragma := '<*' OUT '*>' ;
+
+/* NORETURN Pragma */
+
+noReturnPragma := '<*' NORETURN '*>' ;
+
+/* SINGLEASSIGN Pragma */
+
+singleAssignPragma := '<*' SINGLEASSIGN '*>' ;
+
+/* LOWLATENCY Pragma */
+
+lowLatencyPragma := '<*' LOWLATENCY '*>' ;
+
+/* VOLATILE Pragma */
+
+volatilePragma := '<*' VOLATILE '*>' ;
+
+/* DEPRECATED */
 
 deprecatedPragma := '<*' DEPRECATED '*>' ;
-
 
 /* PRIVATETO Pragma */
 
@@ -65,7 +100,7 @@ ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
 /* Implementation Defined Pragma */
 
 implDefPragma :=
-  '<*' ( implPrefix '.' )? pragmaSymbol ( '=' constExpr )? '|' ctMsgMode '*>' ;
+  '<*' ( implPrefix '.' )? pragmaSymbol ( '=' constExpr )? '*>' ;
 
 
 /* Compile Time Message Mode */
