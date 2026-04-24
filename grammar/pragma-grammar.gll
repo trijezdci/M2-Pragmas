@@ -25,7 +25,10 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ADDR, ...
+  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FALSE, FFI, FFIDENT, FORWARD,
+  GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT,
+  PADBITS, PURITY, PRESETS, PRIVATETO, SINGLEASSIGN, TEST, TRUE,
+  VOLATILE, WARN
   ;
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
