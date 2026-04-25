@@ -25,9 +25,9 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD, GENERATED,
-  INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
-  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE, WARN
+  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD, FROM,
+  GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS,
+  PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TEST, TYPE, VOLATILE, WARN
   ;
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -35,61 +35,138 @@ reserved
 /* MSG Pragma */
 
 msgPragma :=
-  '<*' MSG '=' ( INFO | WARN | ERROR | FATAL ) ':'
-  msgComponent ( ',' msgComponent )* '*>'
-  ;
+  '<*' MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* '*>' ;
+
+msgMode :=
+  INFO | WARN | ERROR | FATAL ;
 
 msgComponent :=
-  String | constQualident | '$' valuePragmaDenoter | '?' pragmaDenoter
+  String | constQualident | '$' valuePragmaDenoter
 
 .valuePragmaDenoter := ALIGN | ENCODING ;
 
+
+/* TEST Pragma */
+
+pragmaTEST :=
+  "<*" TEST pragmaTestExpr ":"
+  msgMode ( msgText )? "|" msgMode ( msgText )? "*>" ;
+
+pragmaTestExpr :=
+  pragmaDenoter | "?(" pragmaDenoter ")" ;
+
 .pragmaDenoter :=
   ADDR, ALIGN, DEPRECATED, ENCODING, FFI, FFIDENT, FORWARD, GENERATED, INLINE,
-  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
-  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE
+  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS, PRIVATETO,
+  SINGLEASSIGN, TEST, VOLATILE
   ;
- 
+
+msgText :=
+  String | constQualident ;
+
+
 /* INLINE Pragma */
 
 inlinePragma := '<*' INLINE '*>' ;
+
 
 /* NOINLINE Pragma */
 
 noInlinePragma := '<*' NOINLINE '*>' ;
 
+
 /* OUT Pragma */
 
 outPragma := '<*' OUT '*>' ;
+
+
+/* GENERATED Pragma */
+
+generatedPragma :=
+  '<*' GENERATED FROM template '.' dateStamp ',' timeStamp '*>' ;
+
+alias template = StdIdent ;
+
+dateStamp := year '-' month '-' year ;
+
+timeStamp := hours ':' minutes ':' seconds '+' tzOffset ;
+
+
+/* FORWARD Pragma */
+
+forwardPragma :=
+  '<*' FORWARD ( TYPE | PROC ) identList '*>' ;
+
+
+/* ENCODING Pragma */
+
+encodingPragma :=
+  '<*' ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList '*>' ;
+
+codePointSampleList :=
+  codePointSample ( ',' codePointSample )* ;
+
+codePointSample :=
+  quotedCharacter '=' characterCode ;
+
+
+/* ALIGN Pragma */
+
+alignPragma :=
+  '<*' ALIGN '=' inPragmaExpr '*>' ;
+
+
+/* PADBITS Pragma */
+
+padBitsPragma :=
+  '<*' PADBITS '=' inPragmaExpr '*>' ;
+
+
+/* PURITY Pragma */
+
+purityPragma :=
+  '<*' PURITY '=' inPragmaExpr '*>' ;
+
 
 /* NORETURN Pragma */
 
 noReturnPragma := '<*' NORETURN '*>' ;
 
+
 /* SINGLEASSIGN Pragma */
 
 singleAssignPragma := '<*' SINGLEASSIGN '*>' ;
+
 
 /* LOWLATENCY Pragma */
 
 lowLatencyPragma := '<*' LOWLATENCY '*>' ;
 
+
 /* VOLATILE Pragma */
 
 volatilePragma := '<*' VOLATILE '*>' ;
 
+
 /* DEPRECATED */
 
 deprecatedPragma := '<*' DEPRECATED '*>' ;
+
 
 /* PRIVATETO Pragma */
 
 privatetoPragma := '<*' PRIVATETO '=' identList '*>' ;
 
 
+/* ADDR Pragma */
+
+addrPragma :=
+  '<*' ADDR '=' inPragmaExpr '*>' ;
+
+
 /* FFI Pragma */
 
-ffiPragma := '<*' FFI '=' ( "C" | "CLR" | "JVM" ) '*>' ;
+ffiPragma := '<*' FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) '*>' ;
 
 
 /* FFIDENT Pragma */
@@ -100,16 +177,11 @@ ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
 /* Implementation Defined Pragma */
 
 implDefPragma :=
-  '<*' ( implPrefix '.' )? pragmaSymbol ( '=' constExpr )? '*>' ;
-
-
-/* Compile Time Message Mode */
-
-.ctMsgMode := INFO | WARN | ERROR | FATAL ;
+  '<*' ( implPrefix '.' )? implDefPragmaDenoter ( '=' inPragmaExpr )? '*>' ;
 
 /* Implementation Prefix and Pragma Symbol */
 
-implPrefix, pragmaSymbol = <implementation-defined> ;
+implPrefix, implDefPragmaDenoter = <implementation-defined> ;
 
 /* Implementation defined implPrefix and pragmaSymbol follow the syntax of StdIdent */
 
