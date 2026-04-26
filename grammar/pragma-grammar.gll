@@ -25,9 +25,10 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD, FROM,
-  GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS,
-  PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TEST, TYPE, VOLATILE, WARN
+  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD,
+  FROM, GENERATED, INFO, INLINE, ISSUE, LOWLATENCY, MSG, NOINLINE, NORETURN,
+  OUT, PADBITS, PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TEST, TYPE,
+  VOLATILE, WARN
   ;
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -57,8 +58,8 @@ pragmaTestExpr :=
 
 .pragmaDenoter :=
   ADDR, ALIGN, DEPRECATED, ENCODING, FFI, FFIDENT, FORWARD, GENERATED, INLINE,
-  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS, PRIVATETO,
-  SINGLEASSIGN, TEST, VOLATILE
+  ISSUE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
+  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE
   ;
 
 msgText :=
@@ -148,11 +149,6 @@ lowLatencyPragma := '<*' LOWLATENCY '*>' ;
 volatilePragma := '<*' VOLATILE '*>' ;
 
 
-/* DEPRECATED */
-
-deprecatedPragma := '<*' DEPRECATED '*>' ;
-
-
 /* PRIVATETO Pragma */
 
 privatetoPragma := '<*' PRIVATETO '=' identList '*>' ;
@@ -172,6 +168,20 @@ ffiPragma := '<*' FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) '*>' ;
 /* FFIDENT Pragma */
 
 ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
+
+
+/* DEPRECATED */
+
+deprecatedPragma := '<*' DEPRECATED '*>' ;
+
+
+/* ISSUE */
+
+issuePragma := '<*' ISSUE bugTrackerRef '*>' ;
+
+bugTrackerRef := '<' URL '>' ;
+
+.URL = <RFC3986 compliant URL> ;
 
 
 /* Implementation Defined Pragma */
