@@ -179,7 +179,7 @@ deprecatedPragma := '<*' DEPRECATED '*>' ;
 
 ticketPragma := '<*' TICKET bugTrackerRef '*>' ;
 
-bugTrackerRef := '#' TicketNumber ( '<' URL '>' )? ;
+bugTrackerRef := '#' TicketNumber ( '[' URL ']' )? ;
 
 alias TicketNumber = NumberLiteral ;
 
