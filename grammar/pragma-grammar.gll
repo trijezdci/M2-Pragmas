@@ -26,9 +26,9 @@ grammar pragmas;
 
 reserved
   ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD,
-  FROM, GENERATED, INFO, INLINE, ISSUE, LOWLATENCY, MSG, NOINLINE, NORETURN,
-  OUT, PADBITS, PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TEST, TYPE,
-  VOLATILE, WARN
+  FROM, GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT,
+  PADBITS, PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TELL, TICKET,
+  TYPE, VOLATILE, WARN
   ;
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -47,10 +47,10 @@ msgComponent :=
 .valuePragmaDenoter := ALIGN | ENCODING ;
 
 
-/* TEST Pragma */
+/* TELL Pragma */
 
-pragmaTEST :=
-  "<*" TEST pragmaTestExpr ":"
+pragmaTELL :=
+  "<*" TELL pragmaTestExpr ":"
   msgMode ( msgText )? "|" msgMode ( msgText )? "*>" ;
 
 pragmaTestExpr :=
@@ -58,8 +58,8 @@ pragmaTestExpr :=
 
 .pragmaDenoter :=
   ADDR, ALIGN, DEPRECATED, ENCODING, FFI, FFIDENT, FORWARD, GENERATED, INLINE,
-  ISSUE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
-  PRIVATETO, SINGLEASSIGN, TEST, VOLATILE
+  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
+  PRIVATETO, SINGLEASSIGN, TELL, TICKET, VOLATILE
   ;
 
 msgText :=
@@ -175,13 +175,15 @@ ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
 deprecatedPragma := '<*' DEPRECATED '*>' ;
 
 
-/* ISSUE */
+/* TICKET */
 
-issuePragma := '<*' ISSUE bugTrackerRef '*>' ;
+ticketPragma := '<*' TICKET bugTrackerRef '*>' ;
 
-bugTrackerRef := '<' URL '>' ;
+bugTrackerRef := '#' TicketNumber ( '<' URL '>' )? ;
 
-.URL = <RFC3986 compliant URL> ;
+alias TicketNumber = NumberLiteral ;
+
+.URL := <RFC3986 compliant URL> ;
 
 
 /* Implementation Defined Pragma */
