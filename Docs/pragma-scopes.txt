@@ -1,0 +1,39 @@
+Pragmas with File Scope
+
+ENCODING, VER
+
+Pragmas with Module Scope
+
+PRIVATETO, DEPRECATED, GC, ARC, ALIGN, ABI, FFI
+
+Pragmas with Type Declaration Scope
+
+DEPRECATED, ALIGN, PACKED
+
+Pragmas with Constant Declaration Scope
+
+DEPRECATED
+
+Pragmas with Variable Declaration Scope
+
+DEPRECATED, OWNER, BORROWER, LOWLATENCY, VOLATILE, SINGLEASSIGN, ADDR, FFIDENT
+
+Pragmas with Procedure Declaration Scope
+
+DEPRECATED, RETAIN, RELEASE, PURE, WEAK, DET, INLINE, NOINLINE, NORETURN, ADDR, FFIDENT
+
+Pragmas with Formal Parameter List Scope
+
+IN, OUT, OWNER, BORROWER, LOWLATENCY
+
+Pragmas with List Item Scope
+
+IN, OUT, OWNER, BORROWER, LOWLATENCY
+
+Pragmas with Point-Forward Scope
+
+PRESET, UNSET, FORWARD
+
+Pragmas without Scope
+
+MSG, TELL, GENERATED, TICKET
