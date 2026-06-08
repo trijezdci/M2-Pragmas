@@ -10,15 +10,15 @@ Pragmas with Type Declaration Scope
 
 DEPRECATED, ALIGN, PACKED
 
-Pragmas with Constant Declaration Scope
+Pragmas with Constant Definition Scope
 
 DEPRECATED
 
-Pragmas with Variable Declaration Scope
+Pragmas with Variable Definition Scope
 
 DEPRECATED, OWNER, BORROWER, LOWLATENCY, VOLATILE, SINGLEASSIGN, ADDR, FFIDENT
 
-Pragmas with Procedure Declaration Scope
+Pragmas with Procedure Scope
 
 DEPRECATED, RETAIN, RELEASE, PURE, WEAK, DET, INLINE, NOINLINE, NORETURN, ADDR, FFIDENT
 
@@ -36,4 +36,4 @@ PRESET, UNSET, FORWARD
 
 Pragmas without Scope
 
-MSG, TELL, GENERATED, TICKET
+MSG, TELL, GENERATED, TICKET 
