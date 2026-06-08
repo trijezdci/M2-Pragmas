@@ -29,14 +29,14 @@ Pragmas with Procedure Scope
 may be placed at the end of the procedure header,
 before the terminating semicolon.
 
-Pragmas with Formal Parameter List Scope
+Pragmas with List Scope
 
-may be placed at the end of the parameter list,
+may be placed at the end of a field list or parameter list,
 before the separating semicolon or closing parenthesis.
 
 Pragmas with List Item Scope
 
-may be placed after the parameter's identifier,
+may be placed after the list item's identifier,
 before the separating comma or following colon.
 
 Pragmas with Point-Forward Scope
