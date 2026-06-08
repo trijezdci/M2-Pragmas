@@ -1,8 +1,9 @@
 Pragmas with File Scope
 
-may be placed anywhere in the File,
-before or after a token, another pragma or a comment,
-but should ideally be placed before the module header.
+may be placed strictly in order
+(1) ENCODING, (2) VER, (3) GENERATED,
+possibly before or after a comment,
+always before the module header.
 
 Pragmas with Module Scope
 
@@ -46,6 +47,8 @@ before or after a token, another pragma or a comment.
 
 Pragmas without Scope
 
-may be placed anywhere in the File,
-before or after a token, another pragma or a comment,
-but should ideally be placed after pragmas with file scope.
+may be placed before the module header:
+after any and all pragmas with file scope.
+
+or after the module header:
+anywhere an import, a definition or declaration or a statement may appear.
