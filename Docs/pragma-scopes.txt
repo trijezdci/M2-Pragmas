@@ -1,51 +1,47 @@
 Pragmas with File Scope
 
-may be placed anywhere in the File,
-before or after a token, another pragma or a comment,
-but should ideally be placed before the module header.
+ENCODING, VER
 
 Pragmas with Module Scope
 
-may be placed at the end of the module header
-before the terminating semicolon.
+PRIVATETO, DEPRECATED, GC, ARC, ALIGN, ABI, FFI
 
 Pragmas with Type Declaration Scope
 
-in record type declarations:
-may be placed at the end of the record header,
-before the field list sequence.
+DEPRECATED, ALIGN, PACKED
 
-in other type declarations:
-may be placed at the end of the declaration,
-before the terminating semicolon.
+Pragmas with Constant Definition Scope
 
-Pragmas with Constant or Variable Definition Scope
+DEPRECATED
 
-may be placed at the end of the definition,
-before the terminating semicolon;
+Pragmas with Variable Definition Scope
+
+DEPRECATED, OWNER, BORROWER, LOWLATENCY, VOLATILE, SINGLEASSIGN, ADDR, FFIDENT
 
 Pragmas with Procedure Scope
 
-may be placed at the end of the procedure header,
-before the terminating semicolon.
+DEPRECATED, RETAIN, RELEASE, PURE, WEAK, DET, INLINE, NOINLINE, NORETURN, ADDR, FFIDENT
 
-Pragmas with List Scope
+Pragmas with Record Field List Scope
 
-may be placed at the end of a field list or parameter list,
-before the separating semicolon or closing parenthesis.
+ALIGN, PACKED
 
-Pragmas with List Item Scope
+Pragmas with Parameter List Scope
 
-may be placed after the list item's identifier,
-before the separating comma or following colon.
+IN, OUT, OWNER, BORROWER, LOWLATENCY
+
+Pragmas with Record Field List Item Scope
+
+ALIGN, PACKED
+
+Pragmas with Parameter List Item Scope
+
+IN, OUT, OWNER, BORROWER, LOWLATENCY
 
 Pragmas with Point-Forward Scope
 
-may be placed anywhere within the module body,
-before or after a token, another pragma or a comment.
+PRESET, UNSET, FORWARD
 
 Pragmas without Scope
 
-may be placed anywhere in the File,
-before or after a token, another pragma or a comment,
-but should ideally be placed after pragmas with file scope.
+MSG, TELL, GENERATED, TICKET
