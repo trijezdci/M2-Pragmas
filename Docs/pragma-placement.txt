@@ -1,7 +1,7 @@
 Pragmas with File Scope
 
 may be placed strictly in order
-(1) ENCODING, (2) VER, (3) GENERATED, (4) TICKET
+(1) ENCODING, (2) VARIANT, (3) GENERATED, (4) TICKET
 possibly before or after a comment,
 always before the module header.
 
