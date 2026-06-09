@@ -1,6 +1,6 @@
 Pragmas with File Scope
 
-ENCODING, VER, GENERATED, TICKET
+ENCODING, VARIANT, GENERATED, TICKET
 
 Pragmas with Module Scope
 
@@ -44,4 +44,4 @@ PRESET, UNSET, FORWARD
 
 Pragmas without Scope
 
-MSG, TELL, TICKET
+MSG, TELL, TICKET 
