@@ -24,7 +24,7 @@ DEPRECATED, RETAIN, RELEASE, PURE, WEAK, DET, INLINE, NOINLINE, NORETURN, ADDR, 
 
 Pragmas with Record Field List Scope
 
-ALIGN, PACKED
+ALIGN, PACKED, LEADBITS
 
 Pragmas with Parameter List Scope
 
@@ -32,7 +32,7 @@ IN, OUT, OWNER, BORROWER, LOWLATENCY
 
 Pragmas with Record Field List Item Scope
 
-ALIGN, PACKED
+ALIGN, PACKED, PADBITS
 
 Pragmas with Parameter List Item Scope
 
@@ -44,4 +44,4 @@ PRESET, UNSET, FORWARD
 
 Pragmas without Scope
 
-MSG, TELL, TICKET 
+MSG, TELL, TICKET
