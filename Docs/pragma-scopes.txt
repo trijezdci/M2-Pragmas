@@ -1,6 +1,6 @@
 Pragmas with File Scope
 
-ENCODING, VARIANT, GENERATED, TICKET
+ENCODING, VARIANT, GENERATED
 
 Pragmas with Module Scope
 
