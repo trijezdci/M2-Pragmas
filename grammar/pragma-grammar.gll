@@ -25,18 +25,181 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ADDR, ALIGN, DEPRECATED, ENCODING, ERROR, FATAL, FFI, FFIDENT, FORWARD,
-  FROM, GENERATED, INFO, INLINE, LOWLATENCY, MSG, NOINLINE, NORETURN, OUT,
-  PADBITS, PURITY, PRESETS, PRIVATETO, PROC, SINGLEASSIGN, TELL, TICKET,
-  TYPE, VOLATILE, WARN
-  ;
+  ABI, ADDR, ALIGN, ARC, BORROWER, DEPRECATED, DETM, ENCODING, ERROR, FATAL,
+  FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO, INLINE, LEADBITS.
+  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, OWNER, PACKED,  PADBITS, PRESETS,
+  PRIVATETO, PROC, PURE, RELEASE, RETAIN, SINGLEASSIGN, TELL, TICKET, TYPE,
+  UNSET, VARIANT, VOLATILE, WARN, WEAK ;
+
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
 
-/* MSG Pragma */
+/* Pragma Block */
 
-msgPragma :=
-  '<*' MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* '*>' ;
+pragmaBlock :=
+  '<*' pragmaBody '*>' ;
+
+/* Pragma Body */
+
+pragmaBody :=
+  standalonePragmaBody | pragmaBodySeq | implDefPragmaBody ;
+
+/* Standalone Pragma Body */
+  
+standalonePragmaBody :=
+  pragmaBodyENCODING |
+  pragmaBodyFORWARD |
+  pragmaBodyGENERATED |
+  pragmaBodyMSG |
+  pragmaBodyPRESETS |
+  pragmaBodyTELL |
+  pragmaBodyTICKET |
+  pragmaBodyUNSET |
+  pragmaBodyVARIANT ;
+
+/* Pragma Body Sequence */
+
+pragmaBodySeq :=
+  pragmaBody ( ';' pragmaBody )* ;
+
+/* Pragma Body */
+
+pragmaBody :=
+  pragmaBodyABI |
+  pragmaBodyADDR |
+  pragmaBodyALIGN |
+  pragmaBodyARC |
+  pragmaBodyBORROWER |
+  pragmaBodyDEPRECATED |
+  pragmaBodyDETM |
+  pragmaBodyFFI |
+  pragmaBodyFFIDENT |
+  pragmaBodyIN |
+  pragmaBodyINLINE |
+  pragmaBodyLEADBITS |
+  pragmaBodyLOWLATENCY |
+  pragmaBodyNOINLINE |
+  pragmaBodyNORETURN |
+  pragmaBodyOUT |
+  pragmaBodyOWNER |
+  pragmaBodyPACKED |
+  pragmaBodyPADBITS |
+  pragmaBodyPRIVATETO |
+  pragmaBodyPURE |
+  pragmaBodyRELEASE |
+  pragmaBodyRETAIN |
+  pragmaBodySINGLEASSIGN |
+  pragmaBodyVOLATILE |
+  pragmaBodyWEAK ;
+
+
+/* Pragma Bodies in Alphabetical Order */
+
+/* ABI Pragma Body */
+
+pragmaBodyABI :=
+  ABI '=' ( '"C"' | '"CLR"' | '"JVM"' ) ;
+
+
+/* ADDR Pragma Body */
+
+pragmaBodyADDR :=
+  ADDR '=' inPragmaExpr ;
+
+
+/* ALIGN Pragma Body */
+
+pragmaBodyALIGN :=
+  ALIGN '=' inPragmaExpr ;
+
+
+/* ARC Pragma Body */
+
+pragmaBodyARC := ARC ;
+
+
+/* BORROWER Pragma Body */
+
+pragmaBodyBORROWER := BORROWER ;
+
+
+/* DEPRECATED Pragma Body */
+
+pragmaBodyDEPRECATED := DEPRECATED ;
+
+
+/* DETM Pragma Body */
+
+pragmaBodyDETM := DETM ;
+
+
+/* ENCODING Pragma Body */
+
+encodingPragma :=
+  ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList ;
+
+codePointSampleList :=
+  codePointSample ( ',' codePointSample )* ;
+
+codePointSample :=
+  quotedCharacter '=' characterCode ;
+
+
+/* FFI Pragma Body */
+
+pragmaBodyFFI :=
+  FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) ;
+
+
+/* FFIDENT Pragma Body */
+
+pragmaBodyFFI :=
+  FFIDENT '=' StringLiteral ;
+
+
+/* FORWARD Pragma Body */
+
+pragmaBodyFORWARD :=
+  FORWARD ( TYPE | PROC ) identList ;
+
+
+/* GENERATED Pragma Body */
+
+pragmaBodyGENERATED :=
+  GENERATED FROM template '.' dateStamp ',' timeStamp ;
+
+alias template = StdIdent ;
+
+dateStamp := year '-' month '-' year ;
+
+timeStamp := hours ':' minutes ':' seconds '+' tzOffset ;
+
+
+/* IN Pragma Body */
+
+pragmaBodyIN := IN ;
+
+
+/* INLINE Pragma Body */
+
+pragmaBodyINLINE := INLINE ;
+
+
+/* LEADBITS Pragma Body */
+
+pragmaBodyLEADBITS :=
+  LEADBITS '=' inPragmaExpr ;
+
+
+/* LOWLATENCY Pragma Body */
+
+pragmaBodyLOWLATENCY := LOWLATENCY ;
+
+
+/* MSG Pragma Body */
+
+pragmaBodyMSG :=
+  MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* ;
 
 msgMode :=
   INFO | WARN | ERROR | FATAL ;
@@ -47,149 +210,124 @@ msgComponent :=
 .valuePragmaDenoter := ALIGN | ENCODING ;
 
 
-/* TELL Pragma */
+/* NOINLINE Pragma Body */
 
-pragmaTELL :=
-  "<*" TELL pragmaTestExpr ":"
-  msgMode ( msgText )? "|" msgMode ( msgText )? "*>" ;
+pragmaBodyNOINLINE := NOINLINE ;
+
+
+/* NORETURN Pragma Body */
+
+pragmaBodyNORETURN := NORETURN ;
+
+
+/* OUT Pragma Body */
+
+pragmaBodyOUT := OUT ;
+
+
+/* OWNER Pragma Body */
+
+pragmaBodyOWNER := OWNER ;
+
+
+/* PACKED Pragma Body */
+
+pragmaBodyPACKED := PACKED ;
+
+
+/* PADBITS Pragma Body */
+
+pragmaBodyPADBITS :=
+  PADBITS '=' inPragmaExpr ;
+
+
+/* PRESETS Pragma Body */
+
+pragmaBodyPRESETS :=
+  PRESETS '=' identList ;
+
+
+/* PRIVATETO Pragma Body */
+
+pragmaBodyPRIVATETO :=
+  PRIVATETO '=' identList ;
+
+
+/* PURE Pragma Body */
+
+pragmaBodyPURE := PURE ;
+
+
+/* RELEASE Pragma Body */
+
+pragmaBodyRELEASE := RELEASE ;
+
+
+/* RETAIN Pragma Body */
+
+pragmaBodyRETAIN := RETAIN ;
+
+
+/* SINGLEASSIGN Pragma Body */
+
+pragmaBodySINGLEASSIGN := SINGLEASSIGN ;
+
+
+/* TELL Pragma Body */
+
+pragmaBodyTELL :=
+  TELL pragmaTestExpr ":"
+  msgMode ( msgText )? "|" msgMode ( msgText )? ;
 
 pragmaTestExpr :=
   pragmaDenoter | "?(" pragmaDenoter ")" ;
 
 .pragmaDenoter :=
-  ADDR, ALIGN, DEPRECATED, ENCODING, FFI, FFIDENT, FORWARD, GENERATED, INLINE,
-  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, PADBITS, PURITY, PRESETS,
-  PRIVATETO, SINGLEASSIGN, TELL, TICKET, VOLATILE
-  ;
+  ABI | ADDR | ALIGN | ARC | BORROWER | DEPRECATED | DETM | ENCODING | FFI |
+  FFIDENT | FORWARD | GENERATED | IN | INLINE | LEADBITS | LOWLATENCY | MSG |
+  NOINLINE | NORETURN | OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO |
+  PURE | RELEASE | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET | VARIANT |
+  VOLATILE | WEAK ;
 
 msgText :=
   String | constQualident ;
 
 
-/* INLINE Pragma */
+/* TICKET Pragma Body */
 
-inlinePragma := '<*' INLINE '*>' ;
-
-
-/* NOINLINE Pragma */
-
-noInlinePragma := '<*' NOINLINE '*>' ;
-
-
-/* OUT Pragma */
-
-outPragma := '<*' OUT '*>' ;
-
-
-/* GENERATED Pragma */
-
-generatedPragma :=
-  '<*' GENERATED FROM template '.' dateStamp ',' timeStamp '*>' ;
-
-alias template = StdIdent ;
-
-dateStamp := year '-' month '-' year ;
-
-timeStamp := hours ':' minutes ':' seconds '+' tzOffset ;
-
-
-/* FORWARD Pragma */
-
-forwardPragma :=
-  '<*' FORWARD ( TYPE | PROC ) identList '*>' ;
-
-
-/* ENCODING Pragma */
-
-encodingPragma :=
-  '<*' ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList '*>' ;
-
-codePointSampleList :=
-  codePointSample ( ',' codePointSample )* ;
-
-codePointSample :=
-  quotedCharacter '=' characterCode ;
-
-
-/* ALIGN Pragma */
-
-alignPragma :=
-  '<*' ALIGN '=' inPragmaExpr '*>' ;
-
-
-/* PADBITS Pragma */
-
-padBitsPragma :=
-  '<*' PADBITS '=' inPragmaExpr '*>' ;
-
-
-/* PURITY Pragma */
-
-purityPragma :=
-  '<*' PURITY '=' inPragmaExpr '*>' ;
-
-
-/* NORETURN Pragma */
-
-noReturnPragma := '<*' NORETURN '*>' ;
-
-
-/* SINGLEASSIGN Pragma */
-
-singleAssignPragma := '<*' SINGLEASSIGN '*>' ;
-
-
-/* LOWLATENCY Pragma */
-
-lowLatencyPragma := '<*' LOWLATENCY '*>' ;
-
-
-/* VOLATILE Pragma */
-
-volatilePragma := '<*' VOLATILE '*>' ;
-
-
-/* PRIVATETO Pragma */
-
-privatetoPragma := '<*' PRIVATETO '=' identList '*>' ;
-
-
-/* ADDR Pragma */
-
-addrPragma :=
-  '<*' ADDR '=' inPragmaExpr '*>' ;
-
-
-/* FFI Pragma */
-
-ffiPragma := '<*' FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) '*>' ;
-
-
-/* FFIDENT Pragma */
-
-ffidentPragma := '<*' FFIDENT '=' StringLiteral '*>' ;
-
-
-/* DEPRECATED */
-
-deprecatedPragma := '<*' DEPRECATED '*>' ;
-
-
-/* TICKET */
-
-ticketPragma := '<*' TICKET bugTrackerRef '*>' ;
-
-bugTrackerRef := '#' TicketNumber ( '[' URL ']' )? ;
+pragmaBodyTICKET :=
+  TICKET '#' TicketNumber ( '[' URL ']' )? ;
 
 alias TicketNumber = NumberLiteral ;
 
 .URL := <RFC3986 compliant URL> ;
 
 
-/* Implementation Defined Pragma */
+/* UNSET Pragma Body */
 
-implDefPragma :=
-  '<*' ( implPrefix '.' )? implDefPragmaDenoter ( '=' inPragmaExpr )? '*>' ;
+pragmaBodyUNSET := UNSET ;
+
+
+/* VARIANT Pragma Body */
+
+pragmaBodyVARIANT :=
+  VARIANT '=' identList ;
+
+
+/* VOLATILE Pragma Body */
+
+pragmaBodyVOLATILE := VOLATILE ;
+
+
+/* WEAK Pragma Body */
+
+pragmaBodyWEAK := WEAK ;
+
+
+/* Body of Implementation Defined Pragma */
+
+implDefPragmaBody :=
+  ( implPrefix '.' )? implDefPragmaDenoter ( '=' inPragmaExpr )? ;
 
 /* Implementation Prefix and Pragma Symbol */
 
@@ -203,8 +341,7 @@ implPrefix, implDefPragmaDenoter = <implementation-defined> ;
 /* Identifier */
 
 StdIdent :=
-  Letter ( Letter | Digit )*
-  ;
+  Letter ( Letter | Digit )* ;
 
 /* Letter Or Digit */
 
@@ -233,20 +370,17 @@ StringLiteral :=
 /* Single-Quoted String Literal */
 
 .SingleQuotedString :=
-  "'" ( QuotableCharacter | '"' )* "'"
-  ;
+  "'" ( QuotableCharacter | '"' )* "'" ;
 
 /* Double-Quoted String Literal */
 
 .DoubleQuotedString :=
-  '"' ( QuotableCharacter | "'" )* '"'
-  ;
+  '"' ( QuotableCharacter | "'" )* '"' ;
 
 /* Quotable Character */
 
 .QuotableCharacter :=
-  Digit | Letter | Space | NonAlphaNumQuotable | EscapedCharacter
-  ;
+  Digit | Letter | Space | NonAlphaNumQuotable | EscapedCharacter ;
 
 /* Letter */
 
@@ -261,14 +395,12 @@ StringLiteral :=
 .NonAlphaNumQuotable :=
   '!' | '#' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' |
   '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' |
-  '[' | '\' | ']' | '^' | '_' | '`' | '{' | '|' | '}' | '~'
-  ;
+  '[' | '\' | ']' | '^' | '_' | '`' | '{' | '|' | '}' | '~' ;
 
 /* Escaped Character */
 
 .EscapedCharacter :=
-  '\' ( 'n' | 't' | '\' )
-  ;
+  '\' ( 'n' | 't' | '\' ) ;
 
 
 /* * *   I g n o r e   S y m b o l s   * * */
@@ -276,38 +408,17 @@ StringLiteral :=
 /* Whitespace */
 
 Whitespace :=
-  Space | Tabulator
-  ;
+  Space | Tabulator ;
 
-/* Tabulator */
+.Space := 0u20 ;
+
 .Tabulator := 0u9 ;
-
-
-/* Line Comment */
-
-LineComment :=
-  '!' CommentCharacter* EndOfLine
-  ;
-
-
-/* Block Comment */
-
-BlockComment :=
-  '(*' ( CommentCharacter | BlockComment | EndOfLine )* '*)'
-  ;
-
-/* Comment Character */
-
-.CommentCharacter :=
-  Digit | Letter | Whitespace | NonAlphaNumQuotable | '\' | "'" | '"'
-  ; /* greedy */
 
 
 /* End of Line Marker */
 
 EndOfLine :=
-  LF | CR ( LF )?
-  ;
+  LF | CR ( LF )? ;
 
 /* ASCII LF */
 
@@ -318,4 +429,4 @@ EndOfLine :=
 .CR := 0uD ;
 
 
-end g.
+endg.
