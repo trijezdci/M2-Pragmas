@@ -1,4 +1,4 @@
-/* Pragma-Grammar -- EBNF Grammar for Modula-2 Pragmas.
+/* Pragma-Grammar -- EBNF Grammar for Pascal, Modula-2 and Oberon Pragmas.
  *
  * Copyright (c) 2026 The Modula-2 Software Foundation
  *
@@ -6,7 +6,7 @@
  *
  * @synopsis
  *
- * This document describes the grammar of Modula-2 Pragmas in EBNF.
+ * This document describes the grammar of Portable Pragmas in EBNF.
  *
  * @repository
  *
@@ -16,7 +16,7 @@
  *
  * pragma-grammar.gll
  *
- * Grammar of Modula-2 pragmas.
+ * Grammar of portable pragmas for Modula-2 and other Wirthian languages.
  *
  */
 
@@ -36,15 +36,22 @@ reserved
 
 /* Pragma Block */
 
+/* For M2 R10 and ISO M2 */
 pragmaBlock :=
   '<*' pragmaBody '*>' ;
+
+/* For Pascal, classical M2 and Oberon */
+altPragmaBlock :=
+  '(*$' pragmaBody '*)' ;
+
 
 /* Pragma Body */
 
 pragmaBody :=
   standalonePragmaBody | pragmaBodySeq | implDefPragmaBody ;
 
-/* Standalone Pragma Body */
+
+/* Body of Standalone Pragma */
   
 standalonePragmaBody :=
   pragmaBodyENCODING |
@@ -57,14 +64,15 @@ standalonePragmaBody :=
   pragmaBodyUNSET |
   pragmaBodyVARIANT ;
 
+
 /* Pragma Body Sequence */
 
 pragmaBodySeq :=
-  pragmaBody ( ';' pragmaBody )* ;
+  chainablePragmaBody ( ';' chainablePragmaBody )* ;
 
-/* Pragma Body */
+/* Body of Chainable Pragma */
 
-pragmaBody :=
+chainablePragmaBody :=
   pragmaBodyABI |
   pragmaBodyADDR |
   pragmaBodyALIGN |
