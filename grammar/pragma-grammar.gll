@@ -69,11 +69,11 @@ standalonePragmaBody :=
 /* Pragma Body Sequence */
 
 pragmaBodySeq :=
-  chainablePragmaBody ( ';' chainablePragmaBody )* ;
+  combinablePragmaBody ( ';' combinablePragmaBody )* ;
 
-/* Body of Chainable Pragma */
+/* Body of Combinable Pragma */
 
-chainablePragmaBody :=
+combinablePragmaBody :=
   pragmaBodyABI |
   pragmaBodyADDR |
   pragmaBodyALIGN |
