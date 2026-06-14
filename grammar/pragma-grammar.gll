@@ -318,20 +318,20 @@ pragmaBodySINGLEASSIGN := SINGLEASSIGN ;
 /* TELL Pragma Body */
 
 pragmaBodyTELL :=
-  TELL symbolInspection | pragmaInspection ;
+  TELL ( symbolInspection | pragmaInspection ) ;
   
 .symbolInspection := Qualident ;
 
 pragmaInspection :=
   ( pragmaTestExpr | pragmaValueExpr ) userDefinedMsg? ;
   
-pragmaTestExpr := "?(" pragmaDenoter ")" ;
+.pragmaTestExpr := "?(" pragmaDenoter ")" ;
 
-pragmaValueExpr := "$(" pragmaDenoter ")" ;
+.pragmaValueExpr := "$(" pragmaDenoter ")" ;
 
 userDefinedMsg := ":" customMsg ( "|" altCustomMsg )?
 
-customMsg := msgMode msgText? ; /* used if true */
+.customMsg := msgMode msgText? ; /* used if true */
 
 alias altCustomMsg = customMsg ; /* used if false */
 
