@@ -318,11 +318,22 @@ pragmaBodySINGLEASSIGN := SINGLEASSIGN ;
 /* TELL Pragma Body */
 
 pragmaBodyTELL :=
-  TELL pragmaTestExpr ":"
-  msgMode ( msgText )? "|" msgMode ( msgText )? ;
+  TELL symbolInspection | pragmaInspection ;
+  
+.symbolInspection := Qualident ;
 
-pragmaTestExpr :=
-  pragmaDenoter | "?(" pragmaDenoter ")" ;
+pragmaInspection :=
+  ( pragmaTestExpr | pragmaValueExpr ) userDefinedMsg? ;
+  
+pragmaTestExpr := "?(" pragmaDenoter ")" ;
+
+pragmaValueExpr := "$(" pragmaDenoter ")" ;
+
+userDefinedMsg := ":" customMsg ( "|" altCustomMsg )?
+
+customMsg := msgMode msgText? ; /* used if true */
+
+alias altCustomMsg = customMsg ; /* used if false */
 
 .pragmaDenoter :=
   ABI | ADDR | ALIGN | ARC | BORROWER | CONTIGUOUS | DEPRECATED | DETM |
