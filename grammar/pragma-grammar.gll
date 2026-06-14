@@ -25,11 +25,11 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ABI, ADDR, ALIGN, ARC, BORROWER, DEPRECATED, DETM, ENCODING, ERROR, FATAL,
-  FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO, INLINE, LEADBITS.
+  ABI, ADDR, ALIGN, ARC, BORROWER, DEPRECATED, DETM, ENCODING, ENDFWD, ERROR,
+  FATAL, FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO, INLINE, LEADBITS.
   LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, OWNER, PACKED,  PADBITS, PRESETS,
-  PRIVATETO, PROC, PURE, RELEASE, RETAIN, SINGLEASSIGN, TELL, TICKET, TYPE,
-  UNSET, VARIANT, VOLATILE, WARN, WEAK ;
+  PRIVATETO, PURE, RELEASE, RETAIN, SINGLEASSIGN, TELL, TICKET, UNSET,
+  VARIANT, VOLATILE, WARN, WEAK ;
 
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -55,6 +55,7 @@ pragmaBody :=
   
 standalonePragmaBody :=
   pragmaBodyENCODING |
+  pragmaBodyENDFWD |
   pragmaBodyFORWARD |
   pragmaBodyGENERATED |
   pragmaBodyMSG |
@@ -159,6 +160,11 @@ pragmaBodyFFI :=
   FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) ;
 
 
+/* ENDFWD Pragma Body */
+
+pragmaBodyENDFWD := ENDFWD ;
+
+
 /* FFIDENT Pragma Body */
 
 pragmaBodyFFI :=
@@ -167,8 +173,7 @@ pragmaBodyFFI :=
 
 /* FORWARD Pragma Body */
 
-pragmaBodyFORWARD :=
-  FORWARD ( TYPE | PROC ) identList ;
+pragmaBodyFORWARD := FORWARD ;
 
 
 /* GENERATED Pragma Body */
