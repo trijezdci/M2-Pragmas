@@ -25,11 +25,11 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ABI, ADDR, ALIGN, ARC, BORROWER, DEPRECATED, DETM, ENCODING, ENDFWD, ERROR,
-  FATAL, FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO, INLINE, LEADBITS.
-  LOWLATENCY, MSG, NOINLINE, NORETURN, OUT, OWNER, PACKED,  PADBITS, PRESETS,
-  PRIVATETO, PURE, RELEASE, RETAIN, SINGLEASSIGN, TELL, TICKET, UNSET,
-  VARIANT, VOLATILE, WARN, WEAK ;
+  ABI, ADDR, ALIGN, ARC, BORROWER, CONTIGUOUS, DEPRECATED, DETM, ENCODING,
+  ENDFWD, ERROR, FATAL, FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO,
+  INLINE, LEADBITS, LOWLATENCY, MEMALIGN, MSG, NOINLINE, NORETURN, OUT, OWNER,
+  PACKED,  PADBITS, PRESETS, PRIVATETO, PURE, RELEASE, RESIDENT, RETAIN,
+  SINGLEASSIGN, TELL, TICKET, UNSET, VARIANT, VOLATILE, WARN, WEAK ;
 
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -37,10 +37,12 @@ reserved
 /* Pragma Block */
 
 /* For M2 R10 and ISO M2 */
+
 pragmaBlock :=
   '<*' pragmaBody '*>' ;
 
 /* For Pascal, classical M2 and Oberon */
+
 altPragmaBlock :=
   '(*$' pragmaBody '*)' ;
 
@@ -79,14 +81,17 @@ combinablePragmaBody :=
   pragmaBodyALIGN |
   pragmaBodyARC |
   pragmaBodyBORROWER |
+  pragmaBodyCONTIGUOUS |
   pragmaBodyDEPRECATED |
   pragmaBodyDETM |
   pragmaBodyFFI |
   pragmaBodyFFIDENT |
+  pragmaBodyGC |
   pragmaBodyIN |
   pragmaBodyINLINE |
   pragmaBodyLEADBITS |
   pragmaBodyLOWLATENCY |
+  pragmaBodyMEMALIGN |
   pragmaBodyNOINLINE |
   pragmaBodyNORETURN |
   pragmaBodyOUT |
@@ -96,6 +101,7 @@ combinablePragmaBody :=
   pragmaBodyPRIVATETO |
   pragmaBodyPURE |
   pragmaBodyRELEASE |
+  pragmaBodyRESIDENT |
   pragmaBodyRETAIN |
   pragmaBodySINGLEASSIGN |
   pragmaBodyVOLATILE |
@@ -107,7 +113,9 @@ combinablePragmaBody :=
 /* ABI Pragma Body */
 
 pragmaBodyABI :=
-  ABI '=' ( '"C"' | '"CLR"' | '"JVM"' ) ;
+  ABI '=' callingConvention ;
+  
+.callingConvention := '"C"' | '"CLR"' | '"JVM"' ;
 
 
 /* ADDR Pragma Body */
@@ -132,6 +140,11 @@ pragmaBodyARC := ARC ;
 pragmaBodyBORROWER := BORROWER ;
 
 
+/* CONTIGUOUS Pragma Body */
+
+pragmaBodyCONTIGUOUS := CONTIGUOUS ;
+
+
 /* DEPRECATED Pragma Body */
 
 pragmaBodyDEPRECATED := DEPRECATED ;
@@ -145,10 +158,10 @@ pragmaBodyDETM := DETM ;
 /* ENCODING Pragma Body */
 
 encodingPragma :=
-  ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList ;
+  ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList? ;
 
 codePointSampleList :=
-  codePointSample ( ',' codePointSample )* ;
+  ':' codePointSample ( ',' codePointSample )* ;
 
 codePointSample :=
   quotedCharacter '=' characterCode ;
@@ -157,7 +170,7 @@ codePointSample :=
 /* FFI Pragma Body */
 
 pragmaBodyFFI :=
-  FFI '=' ( '"C"' | '"CLR"' | '"JVM"' ) ;
+  FFI '=' callingConvention ;
 
 
 /* ENDFWD Pragma Body */
@@ -174,6 +187,11 @@ pragmaBodyFFI :=
 /* FORWARD Pragma Body */
 
 pragmaBodyFORWARD := FORWARD ;
+
+
+/* GC Pragma Body */
+
+pragmaBodyGC := GC ;
 
 
 /* GENERATED Pragma Body */
@@ -209,6 +227,12 @@ pragmaBodyLEADBITS :=
 pragmaBodyLOWLATENCY := LOWLATENCY ;
 
 
+/* MEMALIGN Pragma Body */
+
+pragmaBodyMEMALIGN :=
+  MEMALIGN '=' inPragmaExpr ;
+
+
 /* MSG Pragma Body */
 
 pragmaBodyMSG :=
@@ -218,7 +242,7 @@ msgMode :=
   INFO | WARN | ERROR | FATAL ;
 
 msgComponent :=
-  String | constQualident | '$' valuePragmaDenoter
+  String | constQualident | '$' valuePragmaDenoter ;
 
 .valuePragmaDenoter := ALIGN | ENCODING ;
 
@@ -276,6 +300,11 @@ pragmaBodyPURE := PURE ;
 pragmaBodyRELEASE := RELEASE ;
 
 
+/* RESIDENT Pragma Body */
+
+pragmaBodyRESIDENT := RESIDENT ;
+
+
 /* RETAIN Pragma Body */
 
 pragmaBodyRETAIN := RETAIN ;
@@ -296,12 +325,12 @@ pragmaTestExpr :=
   pragmaDenoter | "?(" pragmaDenoter ")" ;
 
 .pragmaDenoter :=
-  ABI | ADDR | ALIGN | ARC | BORROWER | DEPRECATED | DETM | ENCODING |
-  ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN | INLINE |
-  LEADBITS | LOWLATENCY | MSG | NOINLINE | NORETURN | OUT | OWNER |
-  PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RELEASE | RETAIN |
-  SINGLEASSIGN | TELL | TICKET | UNSET | VARIANT | VOLATILE | WEAK |
-  implDefPragmaDenoter ;
+  ABI | ADDR | ALIGN | ARC | BORROWER | CONTIGUOUS | DEPRECATED | DETM |
+  ENCODING | ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN |
+  INLINE | LEADBITS | LOWLATENCY | MEMALIGN | MSG | NOINLINE | NORETURN |
+  OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RELEASE |
+  RESIDENT | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET | VARIANT |
+  VOLATILE | WEAK | implDefPragmaDenoter ;
 
 msgText :=
   String | constQualident ;
@@ -357,6 +386,7 @@ implPrefix, implDefPragmaDenoter = <implementation-defined> ;
 StdIdent :=
   Letter ( Letter | Digit )* ;
 
+
 /* Letter Or Digit */
 
 .LetterOrDigit := Letter | Digit ;
@@ -365,8 +395,8 @@ StdIdent :=
 /* Qualified Identifier */
 
 Qualident :=
-  StdIdent ( '.' StdIdent )*
-  ;
+  StdIdent ( '.' StdIdent )* ;
+
 
 /* Number Literal */
 
@@ -378,8 +408,7 @@ Digit := "0" .. "9" ;
 /* String Literal */
 
 StringLiteral :=
-  SingleQuotedString | DoubleQuotedString
-  ;
+  SingleQuotedString | DoubleQuotedString ;
 
 /* Single-Quoted String Literal */
 
