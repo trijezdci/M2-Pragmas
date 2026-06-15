@@ -50,112 +50,112 @@ altPragmaBlock :=
 /* Pragma Body */
 
 pragmaBody :=
-  standalonePragmaBody | pragmaBodySeq | implDefPragmaBody ;
+  standalonePragmaClause | pragmaClauseSeq | implDefPragmaClause ;
 
 
-/* Body of Standalone Pragma */
+/* Standalone Pragma Clause */
   
-standalonePragmaBody :=
-  pragmaBodyENCODING |
-  pragmaBodyENDFWD |
-  pragmaBodyFORWARD |
-  pragmaBodyGENERATED |
-  pragmaBodyMSG |
-  pragmaBodyPRESETS |
-  pragmaBodyTELL |
-  pragmaBodyTICKET |
-  pragmaBodyUNSET |
-  pragmaBodyVARIANT ;
+standalonePragmaClause :=
+  pragmaClauseENCODING |
+  pragmaClauseENDFWD |
+  pragmaClauseFORWARD |
+  pragmaClauseGENERATED |
+  pragmaClauseMSG |
+  pragmaClausePRESETS |
+  pragmaClauseTELL |
+  pragmaClauseTICKET |
+  pragmaClauseUNSET |
+  pragmaClauseVARIANT ;
 
 
-/* Pragma Body Sequence */
+/* Pragma Clause Sequence */
 
-pragmaBodySeq :=
-  combinablePragmaBody ( ';' combinablePragmaBody )* ;
+pragmaClauseSeq :=
+  combinablePragmaClause ( ';' combinablePragmaClause )* ;
 
-/* Body of Combinable Pragma */
+/* Combinable Pragma Clause */
 
-combinablePragmaBody :=
-  pragmaBodyABI |
-  pragmaBodyADDR |
-  pragmaBodyALIGN |
-  pragmaBodyARC |
-  pragmaBodyBORROWER |
-  pragmaBodyCONTIGUOUS |
-  pragmaBodyDEPRECATED |
-  pragmaBodyDETM |
-  pragmaBodyFFI |
-  pragmaBodyFFIDENT |
-  pragmaBodyGC |
-  pragmaBodyIN |
-  pragmaBodyINLINE |
-  pragmaBodyLEADBITS |
-  pragmaBodyLOWLATENCY |
-  pragmaBodyMEMALIGN |
-  pragmaBodyNOINLINE |
-  pragmaBodyNORETURN |
-  pragmaBodyOUT |
-  pragmaBodyOWNER |
-  pragmaBodyPACKED |
-  pragmaBodyPADBITS |
-  pragmaBodyPRIVATETO |
-  pragmaBodyPURE |
-  pragmaBodyRELEASE |
-  pragmaBodyRESIDENT |
-  pragmaBodyRETAIN |
-  pragmaBodySINGLEASSIGN |
-  pragmaBodyVOLATILE |
-  pragmaBodyWEAK ;
+combinablePragmaClause :=
+  pragmaClauseABI |
+  pragmaClauseADDR |
+  pragmaClauseALIGN |
+  pragmaClauseARC |
+  pragmaClauseBORROWER |
+  pragmaClauseCONTIGUOUS |
+  pragmaClauseDEPRECATED |
+  pragmaClauseDETM |
+  pragmaClauseFFI |
+  pragmaClauseFFIDENT |
+  pragmaClauseGC |
+  pragmaClauseIN |
+  pragmaClauseINLINE |
+  pragmaClauseLEADBITS |
+  pragmaClauseLOWLATENCY |
+  pragmaClauseMEMALIGN |
+  pragmaClauseNOINLINE |
+  pragmaClauseNORETURN |
+  pragmaClauseOUT |
+  pragmaClauseOWNER |
+  pragmaClausePACKED |
+  pragmaClausePADBITS |
+  pragmaClausePRIVATETO |
+  pragmaClausePURE |
+  pragmaClauseRELEASE |
+  pragmaClauseRESIDENT |
+  pragmaClauseRETAIN |
+  pragmaClauseSINGLEASSIGN |
+  pragmaClauseVOLATILE |
+  pragmaClauseWEAK ;
 
 
-/* Pragma Bodies in Alphabetical Order */
+/* Pragma Clauses in Alphabetical Order */
 
-/* ABI Pragma Body */
+/* ABI Pragma Clause */
 
-pragmaBodyABI :=
+pragmaClauseABI :=
   ABI '=' callingConvention ;
   
 .callingConvention := '"C"' | '"CLR"' | '"JVM"' ;
 
 
-/* ADDR Pragma Body */
+/* ADDR Pragma Clause */
 
-pragmaBodyADDR :=
+pragmaClauseADDR :=
   ADDR '=' inPragmaExpr ;
 
 
-/* ALIGN Pragma Body */
+/* ALIGN Pragma Clause */
 
-pragmaBodyALIGN :=
+pragmaClauseALIGN :=
   ALIGN '=' inPragmaExpr ;
 
 
-/* ARC Pragma Body */
+/* ARC Pragma Clause */
 
-pragmaBodyARC := ARC ;
-
-
-/* BORROWER Pragma Body */
-
-pragmaBodyBORROWER := BORROWER ;
+pragmaClauseARC := ARC ;
 
 
-/* CONTIGUOUS Pragma Body */
+/* BORROWER Pragma Clause */
 
-pragmaBodyCONTIGUOUS := CONTIGUOUS ;
-
-
-/* DEPRECATED Pragma Body */
-
-pragmaBodyDEPRECATED := DEPRECATED ;
+pragmaClauseBORROWER := BORROWER ;
 
 
-/* DETM Pragma Body */
+/* CONTIGUOUS Pragma Clause */
 
-pragmaBodyDETM := DETM ;
+pragmaClauseCONTIGUOUS := CONTIGUOUS ;
 
 
-/* ENCODING Pragma Body */
+/* DEPRECATED Pragma Clause */
+
+pragmaClauseDEPRECATED := DEPRECATED ;
+
+
+/* DETM Pragma Clause */
+
+pragmaClauseDETM := DETM ;
+
+
+/* ENCODING Pragma Clause */
 
 encodingPragma :=
   ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList? ;
@@ -167,36 +167,36 @@ codePointSample :=
   quotedCharacter '=' characterCode ;
 
 
-/* FFI Pragma Body */
+/* FFI Pragma Clause */
 
-pragmaBodyFFI :=
+pragmaClauseFFI :=
   FFI '=' callingConvention ;
 
 
-/* ENDFWD Pragma Body */
+/* ENDFWD Pragma Clause */
 
-pragmaBodyENDFWD := ENDFWD ;
+pragmaClauseENDFWD := ENDFWD ;
 
 
-/* FFIDENT Pragma Body */
+/* FFIDENT Pragma Clause */
 
-pragmaBodyFFI :=
+pragmaClauseFFI :=
   FFIDENT '=' StringLiteral ;
 
 
-/* FORWARD Pragma Body */
+/* FORWARD Pragma Clause */
 
-pragmaBodyFORWARD := FORWARD ;
-
-
-/* GC Pragma Body */
-
-pragmaBodyGC := GC ;
+pragmaClauseFORWARD := FORWARD ;
 
 
-/* GENERATED Pragma Body */
+/* GC Pragma Clause */
 
-pragmaBodyGENERATED :=
+pragmaClauseGC := GC ;
+
+
+/* GENERATED Pragma Clause */
+
+pragmaClauseGENERATED :=
   GENERATED FROM template '.' dateStamp ',' timeStamp ;
 
 alias template = StdIdent ;
@@ -206,36 +206,36 @@ dateStamp := year '-' month '-' year ;
 timeStamp := hours ':' minutes ':' seconds '+' tzOffset ;
 
 
-/* IN Pragma Body */
+/* IN Pragma Clause */
 
-pragmaBodyIN := IN ;
-
-
-/* INLINE Pragma Body */
-
-pragmaBodyINLINE := INLINE ;
+pragmaClauseIN := IN ;
 
 
-/* LEADBITS Pragma Body */
+/* INLINE Pragma Clause */
 
-pragmaBodyLEADBITS :=
+pragmaClauseINLINE := INLINE ;
+
+
+/* LEADBITS Pragma Clause */
+
+pragmaClauseLEADBITS :=
   LEADBITS '=' inPragmaExpr ;
 
 
-/* LOWLATENCY Pragma Body */
+/* LOWLATENCY Pragma Clause */
 
-pragmaBodyLOWLATENCY := LOWLATENCY ;
+pragmaClauseLOWLATENCY := LOWLATENCY ;
 
 
-/* MEMALIGN Pragma Body */
+/* MEMALIGN Pragma Clause */
 
-pragmaBodyMEMALIGN :=
+pragmaClauseMEMALIGN :=
   MEMALIGN '=' inPragmaExpr ;
 
 
-/* MSG Pragma Body */
+/* MSG Pragma Clause */
 
-pragmaBodyMSG :=
+pragmaClauseMSG :=
   MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* ;
 
 msgMode :=
@@ -247,77 +247,77 @@ msgComponent :=
 .valuePragmaDenoter := ALIGN | ENCODING ;
 
 
-/* NOINLINE Pragma Body */
+/* NOINLINE Pragma Clause */
 
-pragmaBodyNOINLINE := NOINLINE ;
-
-
-/* NORETURN Pragma Body */
-
-pragmaBodyNORETURN := NORETURN ;
+pragmaClauseNOINLINE := NOINLINE ;
 
 
-/* OUT Pragma Body */
+/* NORETURN Pragma Clause */
 
-pragmaBodyOUT := OUT ;
-
-
-/* OWNER Pragma Body */
-
-pragmaBodyOWNER := OWNER ;
+pragmaClauseNORETURN := NORETURN ;
 
 
-/* PACKED Pragma Body */
+/* OUT Pragma Clause */
 
-pragmaBodyPACKED := PACKED ;
+pragmaClauseOUT := OUT ;
 
 
-/* PADBITS Pragma Body */
+/* OWNER Pragma Clause */
 
-pragmaBodyPADBITS :=
+pragmaClauseOWNER := OWNER ;
+
+
+/* PACKED Pragma Clause */
+
+pragmaClausePACKED := PACKED ;
+
+
+/* PADBITS Pragma Clause */
+
+pragmaClausePADBITS :=
   PADBITS '=' inPragmaExpr ;
 
 
-/* PRESETS Pragma Body */
+/* PRESETS Pragma Clause */
 
-pragmaBodyPRESETS :=
+pragmaClausePRESETS :=
   PRESETS '=' identList ;
 
 
-/* PRIVATETO Pragma Body */
+/* PRIVATETO Pragma Clause */
 
-pragmaBodyPRIVATETO :=
+pragmaClausePRIVATETO :=
   PRIVATETO '=' identList ;
 
 
-/* PURE Pragma Body */
+/* PURE Pragma Clause */
 
-pragmaBodyPURE := PURE ;
-
-
-/* RELEASE Pragma Body */
-
-pragmaBodyRELEASE := RELEASE ;
+pragmaClausePURE := PURE ;
 
 
-/* RESIDENT Pragma Body */
+/* RELEASE Pragma Clause */
 
-pragmaBodyRESIDENT := RESIDENT ;
-
-
-/* RETAIN Pragma Body */
-
-pragmaBodyRETAIN := RETAIN ;
+pragmaClauseRELEASE := RELEASE ;
 
 
-/* SINGLEASSIGN Pragma Body */
+/* RESIDENT Pragma Clause */
 
-pragmaBodySINGLEASSIGN := SINGLEASSIGN ;
+pragmaClauseRESIDENT := RESIDENT ;
 
 
-/* TELL Pragma Body */
+/* RETAIN Pragma Clause */
 
-pragmaBodyTELL :=
+pragmaClauseRETAIN := RETAIN ;
+
+
+/* SINGLEASSIGN Pragma Clause */
+
+pragmaClauseSINGLEASSIGN := SINGLEASSIGN ;
+
+
+/* TELL Pragma Clause */
+
+pragmaClauseTELL :=
   TELL ( symbolInspection | pragmaInspection ) ;
   
 .symbolInspection := Qualident ;
@@ -347,9 +347,9 @@ msgText :=
   String | constQualident ;
 
 
-/* TICKET Pragma Body */
+/* TICKET Pragma Clause */
 
-pragmaBodyTICKET :=
+pragmaClauseTICKET :=
   TICKET '#' TicketNumber ( '[' URL ']' )? ;
 
 alias TicketNumber = NumberLiteral ;
@@ -357,30 +357,30 @@ alias TicketNumber = NumberLiteral ;
 .URL := <RFC3986 compliant URL> ;
 
 
-/* UNSET Pragma Body */
+/* UNSET Pragma Clause */
 
-pragmaBodyUNSET := UNSET ;
+pragmaClauseUNSET := UNSET ;
 
 
-/* VARIANT Pragma Body */
+/* VARIANT Pragma Clause */
 
-pragmaBodyVARIANT :=
+pragmaClauseVARIANT :=
   VARIANT '=' identList ;
 
 
-/* VOLATILE Pragma Body */
+/* VOLATILE Pragma Clause */
 
-pragmaBodyVOLATILE := VOLATILE ;
-
-
-/* WEAK Pragma Body */
-
-pragmaBodyWEAK := WEAK ;
+pragmaClauseVOLATILE := VOLATILE ;
 
 
-/* Body of Implementation Defined Pragma */
+/* WEAK Pragma Clause */
 
-implDefPragmaBody :=
+pragmaClauseWEAK := WEAK ;
+
+
+/* Implementation Defined Pragma Clause */
+
+implDefPragmaClause :=
   ( implPrefix '.' )? implDefPragmaDenoter ( '=' inPragmaExpr )? ;
 
 /* Implementation Prefix and Pragma Symbol */
