@@ -25,11 +25,11 @@ grammar pragmas;
 /* * *   R e s e r v e d   W o r d s   * * */
 
 reserved
-  ABI, ADDR, ALIGN, ARC, BORROWER, CONTIGUOUS, DEPRECATED, DETM, ENCODING,
-  ENDFWD, ERROR, FATAL, FFI, FFIDENT, FORWARD, FROM, GENERATED, IN, INFO,
-  INLINE, LEADBITS, LOWLATENCY, MEMALIGN, MSG, NOINLINE, NORETURN, OUT, OWNER,
-  PACKED,  PADBITS, PRESETS, PRIVATETO, PURE, RELEASE, RESIDENT, RETAIN,
-  SINGLEASSIGN, TELL, TICKET, UNSET, VARIANT, VOLATILE, WARN, WEAK ;
+  ABI, ADDR, ALIGN, ANYORDER, ARC, BORROWER, CONTIGUOUS, DEPRECATED, DETM,
+  ENCODING, ENDFWD, ERROR, FATAL, FFI, FFIDENT, FORWARD, FROM, GENERATED, IN,
+  INFO, INLINE, LEADBITS, LOWLATENCY, MEMALIGN, MSG, NOINLINE, NORETURN, OUT,
+  OWNER, PACKED, PADBITS, PRESETS, PRIVATETO, PURE, RANGE, RELEASE, RESIDENT,
+  RETAIN, SINGLEASSIGN, TELL, TICKET, UNSET, VARIANT, VOLATILE, WARN, WEAK ;
 
 
 /* * *   N o n - T e r m i n a l   S y m b o l s   * * */
@@ -79,6 +79,7 @@ combinablePragmaClause :=
   pragmaClauseABI |
   pragmaClauseADDR |
   pragmaClauseALIGN |
+  pragmaClauseANYORDER |
   pragmaClauseARC |
   pragmaClauseBORROWER |
   pragmaClauseCONTIGUOUS |
@@ -100,6 +101,7 @@ combinablePragmaClause :=
   pragmaClausePADBITS |
   pragmaClausePRIVATETO |
   pragmaClausePURE |
+  pragmaClauseRANGE |
   pragmaClauseRELEASE |
   pragmaClauseRESIDENT |
   pragmaClauseRETAIN |
@@ -128,6 +130,11 @@ pragmaClauseADDR :=
 
 pragmaClauseALIGN :=
   ALIGN '=' inPragmaExpr ;
+
+
+/* ANYORDER Pragma Clause */
+
+pragmaClauseANYORDER := ANYORDER ;
 
 
 /* ARC Pragma Clause */
@@ -167,15 +174,15 @@ codePointSample :=
   quotedCharacter '=' characterCode ;
 
 
+/* ENDFWD Pragma Clause */
+
+pragmaClauseENDFWD := ENDFWD ;
+
+
 /* FFI Pragma Clause */
 
 pragmaClauseFFI :=
   FFI '=' callingConvention ;
-
-
-/* ENDFWD Pragma Clause */
-
-pragmaClauseENDFWD := ENDFWD ;
 
 
 /* FFIDENT Pragma Clause */
@@ -197,13 +204,19 @@ pragmaClauseGC := GC ;
 /* GENERATED Pragma Clause */
 
 pragmaClauseGENERATED :=
-  GENERATED FROM template '.' dateStamp ',' timeStamp ;
+  GENERATED FROM template ',' dateStamp ',' timeStamp ;
 
 alias template = StdIdent ;
 
-dateStamp := year '-' month '-' year ;
+dateStamp := year '-' month '-' day ;
+
+alias year = NumberLiteral ;
+
+alias month, day = DigitPair ;
 
 timeStamp := hours ':' minutes ':' seconds '+' tzOffset ;
+
+alias hours, minutes, seconds, tzOffset = DigitPair ;
 
 
 /* IN Pragma Clause */
@@ -242,9 +255,12 @@ msgMode :=
   INFO | WARN | ERROR | FATAL ;
 
 msgComponent :=
-  String | constQualident | '$' valuePragmaDenoter ;
+  StringLiteral | constQualident | '$(' valuePragmaDenoter ')' ;
 
-.valuePragmaDenoter := ALIGN | ENCODING ;
+alias constQualident = qualident ;
+
+.valuePragmaDenoter :=
+  ALIGN | ENCODING | implDefPragmaDenoter ;
 
 
 /* NOINLINE Pragma Clause */
@@ -295,6 +311,15 @@ pragmaClausePRIVATETO :=
 pragmaClausePURE := PURE ;
 
 
+/* RANGE Pragma Clause */
+
+/* !!! Oberon ONLY !!! */
+pragmaClauseRANGE :=
+  RANGE '(' lowerBound '..' upperBound ')' ; 
+
+alias lowerBound, upperBound = inPragmaExpr ;
+
+
 /* RELEASE Pragma Clause */
 
 pragmaClauseRELEASE := RELEASE ;
@@ -320,7 +345,7 @@ pragmaClauseSINGLEASSIGN := SINGLEASSIGN ;
 pragmaClauseTELL :=
   TELL ( symbolInspection | pragmaInspection ) ;
   
-.symbolInspection := Qualident ;
+alias symbolInspection = Qualident ;
 
 pragmaInspection :=
   ( pragmaTestExpr | pragmaValueExpr ) userDefinedMsg? ;
@@ -335,16 +360,16 @@ userDefinedMsg := ":" customMsg ( "|" altCustomMsg )?
 
 alias altCustomMsg = customMsg ; /* used if false */
 
-.pragmaDenoter :=
-  ABI | ADDR | ALIGN | ARC | BORROWER | CONTIGUOUS | DEPRECATED | DETM |
-  ENCODING | ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN |
-  INLINE | LEADBITS | LOWLATENCY | MEMALIGN | MSG | NOINLINE | NORETURN |
-  OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RELEASE |
-  RESIDENT | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET | VARIANT |
-  VOLATILE | WEAK | implDefPragmaDenoter ;
-
 msgText :=
   String | constQualident ;
+
+.pragmaDenoter :=
+  ABI | ADDR | ALIGN | ANYORDER | ARC | BORROWER | CONTIGUOUS | DEPRECATED |
+  DETM | ENCODING | ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN |
+  INLINE | LEADBITS | LOWLATENCY | MEMALIGN | MSG | NOINLINE | NORETURN |
+  OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RANGE |
+  RELEASE | RESIDENT | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET |
+  VARIANT | VOLATILE | WEAK | implDefPragmaDenoter ;
 
 
 /* TICKET Pragma Clause */
@@ -378,16 +403,94 @@ pragmaClauseVOLATILE := VOLATILE ;
 pragmaClauseWEAK := WEAK ;
 
 
+/* * *   I m p l e m e n t a t i o n   D e f i n e d   P r a g m a s   * * */
+
 /* Implementation Defined Pragma Clause */
 
 implDefPragmaClause :=
-  ( implPrefix '.' )? implDefPragmaDenoter ( '=' inPragmaExpr )? ;
+  implDefPragmaDenoter ( '=' inPragmaExpr )? ;
+  
 
-/* Implementation Prefix and Pragma Symbol */
+/* Implementation Defined Pragma Denoter */
 
-implPrefix, implDefPragmaDenoter = <implementation-defined> ;
+implDefPragmaDenoter :=
+  implPrefix '.' ImplDefPragmaSymbol ;
+  
+alias implPrefix = LowerCaseIdent ;
 
-/* Implementation defined implPrefix and pragmaSymbol follow the syntax of StdIdent */
+alias ImplDefPragmaSymbol = TitleOrSnakeCaseIdent ;
+
+
+/* * *   E x p r e s s i o n s   * * */
+
+/* In-Pragma Expression */
+
+inPragmaExpr :=
+  inPragmaSimpleExpr ( OperL1 inPragmaSimpleExpr )?
+  ;
+
+/* Level-1 Operator */
+
+.OperL1 :=
+  '=' | '#' | '<' | '<=' | '>' | '>='
+  ;
+
+
+/* In-Pragma Simple Expression */
+
+inPragmaSimpleExpr :=
+  inPragmaTerm ( OperL2 inPragmaTerm )*
+  ;
+
+/* Level-2 Operator */
+
+.OperL2 :=
+  '+' | '-' | OR
+  ;
+
+
+/* In-Pragma Term */
+
+inPragTerm :=
+  inPragmaSimpleTerm ( OperL3 inPragmaSimpleTerm )*
+  ;
+
+/* Level-3 Operator */
+
+.OperL3　 :=
+  '*' | DIV | MOD | AND
+  ;
+
+
+/* In-Pragma Simple Term */
+
+inPragSimpleTerm :=
+  NOT? inPragmaFactor
+  ;
+
+
+/* In-Pragma Factor */
+
+inPragmaFactor :=
+  NumberLiteral | constQualident  |
+  '$(' valuePragmaDenoter ')' |
+  funcIdent? '(' inPragmaExpr ')'
+  ;
+
+funcIdent :=
+  TMIN | TMAX | TSIZE | TLIMIT ;
+
+
+/* Qualified Identifier */
+
+qualident :=
+  StdIdent ( '.' StdIdent )* ;
+
+
+/* Identifier List */
+
+identList :=
+  StdIdent ( ',' StdIdent )* ;
 
 
 /* * *   T e r m i n a l   S y m b o l s   * * */
@@ -398,43 +501,92 @@ StdIdent :=
   Letter ( Letter | Digit )* ;
 
 
-/* Letter Or Digit */
+/* Title-Case or Snake-Case Identifier */
 
-.LetterOrDigit := Letter | Digit ;
+TitleOrSnakeCaseIdent :=
+  TitleCaseIdent | SnakeCaseIdent ;
 
 
-/* Qualified Identifier */
+ /* Title-Case Identifier */
 
-Qualident :=
-  StdIdent ( '.' StdIdent )* ;
+TitleCaseIdent :=
+  ( CaoitalLetter ( LowerCaseLetter | Digit )+ )+ ;
+
+
+ /* Snake-Case Identifier */
+
+SnakeCaseIdent :=
+  LowerCaseIdent ( '_' LowerCaseIdent )* ;
+
+
+/* Lowercase Identifier */
+
+LowerCaseIdent :=
+  LowerCaseLetter ( LowerCaseLetter | Digit )* ;
 
 
 /* Number Literal */
 
-NumberLiteral := Digit+ ;
+NumberLiteral := Digit+ ( "'" Digit+ )* ;
+
+
+/* Digit */
 
 Digit := "0" .. "9" ;
 
+
+/* Digit Pair */
+
+DigitPair := Digit Digit ;
+
+
+/* Address Literal */
+
+AddressLiteral := '0x' Base16DigitSeq ;
+
+
+/* Base-16 Digit Sequence */
+
+.Base16DigitSeq :=
+  DigitOrAtoF+ ( "'" DigitOrAtoF+ )* ;
+
+
+/* Digit or A to F */
+
+DigitOrAtoF :=
+  Digit | "A" | "B" | "C" | "D" | "E" | "F" ;
+
+
+/* Character Code */
+
+CharacterCode := '0u' Base16DigitSeq ;
+
+
+/* * *   C h a r a c t e r   S t r i n g s   * * */
 
 /* String Literal */
 
 StringLiteral :=
   SingleQuotedString | DoubleQuotedString ;
 
+
 /* Single-Quoted String Literal */
 
 .SingleQuotedString :=
   "'" ( QuotableCharacter | '"' )* "'" ;
+
 
 /* Double-Quoted String Literal */
 
 .DoubleQuotedString :=
   '"' ( QuotableCharacter | "'" )* '"' ;
 
+
 /* Quotable Character */
 
 .QuotableCharacter :=
-  Digit | Letter | Space | NonAlphaNumQuotable | EscapedCharacter ;
+  Digit | Letter | Space | EscapedCharacter |
+  NonAlphaNumQuotable | extUnicodeCharacter ;
 
 /* Letter */
 
@@ -444,6 +596,11 @@ StringLiteral :=
 
 .Space := 0u20 ;
 
+/* Escaped Character */
+
+.EscapedCharacter :=
+  '\' ( 'n' | 't' | '\' ) ;
+
 /* Non-Alphanumeric Quotable Character */
 
 .NonAlphaNumQuotable :=
@@ -451,10 +608,9 @@ StringLiteral :=
   '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' |
   '[' | '\' | ']' | '^' | '_' | '`' | '{' | '|' | '}' | '~' ;
 
-/* Escaped Character */
 
-.EscapedCharacter :=
-  '\' ( 'n' | 't' | '\' ) ;
+.ExtUnicodeCharacter :=
+  <Unicode characters with code points above U+009F>
 
 
 /* * *   I g n o r e   S y m b o l s   * * */
