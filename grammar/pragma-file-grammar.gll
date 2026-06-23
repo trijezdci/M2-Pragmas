@@ -1,0 +1,376 @@
+/* Pragma-File-Grammar -- EBNF Grammar for External Pragma Files.
+ *
+ * Copyright (c) 2026 The Modula-2 Software Foundation
+ *
+ * Author & Maintainer: Benjamin Kowarsch <org.m2sf>
+ *
+ * @synopsis
+ *
+ * This document describes the grammar of Pragma Files.
+ *
+ * @repository
+ *
+ * https://github.com/trijezdci/M2-Pragmas
+ *
+ * @file
+ *
+ * pragma-file-grammar.gll
+ *
+ * Grammar of pragma files for Modula-2 and other Wirthian languages.
+ *
+ */
+
+grammar pragma-file;
+
+/* * *   R e s e r v e d   W o r d s   * * */
+
+reserved
+  ALIGN, ENCODING, MSG, TELL ;
+
+
+/* * *   N o n - T e r m i n a l   S y m b o l s   * * */
+
+/* Pragma File */
+
+/* ISO M2 and M2 R10 */
+
+pragmaFile :=
+  ( blockComment* pragmaBlockENCODING )?
+  ( blockComment* pragmaBlock* )* ;
+  
+pragmaBlock :=
+  '<*' pragmaBody '*>' ;
+
+pragmaBlockENCODING :=
+  '<*' pragmaClauseENCODING '*>' ;
+
+
+/* Pascal, classic M2 and Oberon */
+
+altPragmaFile :=
+  ( blockComment* altPragmaBlockENCODING )?
+  ( blockComment* altPragmaBlock* )* ;
+
+altPragmaBlock :=
+  '(*$' pragmaBody '*)' ;
+
+altPragmaBlockENCODING :=
+  '(*$)*' pragmaClauseENCODING '*)' ;
+
+
+/* Pragma Body */
+
+pragmaBody :=
+  stdPragmaClause | implDefPragmaClauseSeq ;
+
+
+/* ENCODING Pragma Clause */
+
+encodingPragma :=
+  ENCODING '=' ( '"ISO646"' | '"UTF8"' ) codePointSampleList? ;
+
+codePointSampleList :=
+  ':' codePointSample ( ',' codePointSample )* ;
+
+codePointSample :=
+  quotedCharacter '=' characterCode ;
+
+
+/* Standard Pragma Clause */
+
+stdPragmaClause :=
+  pragmaClauseMSG | pragmaClauseTELL ;
+  
+
+/* MSG Pragma Clause */
+
+pragmaClauseMSG :=
+  MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* ;
+
+msgMode :=
+  INFO | WARN | ERROR | FATAL ;
+
+msgComponent :=
+  StringLiteral | constQualident | '$(' valuePragmaDenoter ')' ;
+
+alias constQualident = qualident ;
+
+.valuePragmaDenoter :=
+  ALIGN | ENCODING | implDefPragmaDenoter ;
+
+
+/* TELL Pragma Clause */
+
+pragmaClauseTELL :=
+  TELL ( symbolInspection | pragmaInspection ) ;
+  
+alias symbolInspection = Qualident ;
+
+pragmaInspection :=
+  ( pragmaTestExpr | pragmaValueExpr ) userDefinedMsg? ;
+  
+.pragmaTestExpr := "?(" pragmaDenoter ")" ;
+
+.pragmaValueExpr := "$(" pragmaDenoter ")" ;
+
+userDefinedMsg := ":" customMsg ( "|" altCustomMsg )?
+
+.customMsg := msgMode msgText? ; /* used if true */
+
+alias altCustomMsg = customMsg ; /* used if false */
+
+msgText :=
+  StringLiteral | constQualident ;
+
+.pragmaDenoter :=
+  ABI | ADDR | ALIGN | ANYORDER | ARC | BORROWER | CONTIGUOUS | DEPRECATED |
+  DETM | ENCODING | ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN |
+  INLINE | LEADBITS | LOWLATENCY | MEMALIGN | MSG | NOINLINE | NORETURN |
+  OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RANGE |
+  RELEASE | RESIDENT | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET |
+  VARIANT | VOLATILE | WEAK | implDefPragmaDenoter ;
+
+
+/* Implementation Defined Pragma Clause Sequence */
+
+implDefPragmaClauseSeq :=
+  implDefPragmaClause ( ';' implDefPragmaClause )* ;
+
+
+/* Implementation Defined Pragma Clause */
+
+implDefPragmaClause :=
+  implDefPragmaDenoter ( '=' value )? ;
+  
+.value := StringLiteral | inPragmaExpr ;
+
+
+/* Implementation Defined Pragma Denoter */
+
+implDefPragmaDenoter :=
+  ( ImplPrefix '.' )? ImplDefPragmaSymbol ;
+
+alias implPrefix = LowerCaseIdent ;
+
+alias ImplDefPragmaSymbol = TitleOrSnakeCaseIdent ;
+
+
+/* * *   E x p r e s s i o n s   * * */
+
+/* In-Pragma Expression */
+
+inPragmaExpr :=
+  inPragmaSimpleExpr ( OperL1 inPragmaSimpleExpr )?
+  ;
+
+/* Level-1 Operator */
+
+.OperL1 :=
+  '=' | '#' | '<' | '<=' | '>' | '>='
+  ;
+
+
+/* In-Pragma Simple Expression */
+
+inPragmaSimpleExpr :=
+  inPragmaTerm ( OperL2 inPragmaTerm )*
+  ;
+
+/* Level-2 Operator */
+
+.OperL2 :=
+  '+' | '-' | OR
+  ;
+
+
+/* In-Pragma Term */
+
+inPragTerm :=
+  inPragmaSimpleTerm ( OperL3 inPragmaSimpleTerm )*
+  ;
+
+/* Level-3 Operator */
+
+.OperL3　 :=
+  '*' | DIV | MOD | AND
+  ;
+
+
+/* In-Pragma Simple Term */
+
+inPragSimpleTerm :=
+  NOT? inPragmaFactor
+  ;
+
+
+/* In-Pragma Factor */
+
+inPragmaFactor :=
+  NumberLiteral | constQualident  |
+  '$(' valuePragmaDenoter ')' |
+  funcIdent? '(' inPragmaExpr ')'
+  ;
+
+funcIdent :=
+  TMIN | TMAX | TSIZE | TLIMIT ;
+
+
+/* Qualified Identifier */
+
+qualident :=
+  StdIdent ( '.' StdIdent )* ;
+
+
+/* Identifier List */
+
+identList :=
+  StdIdent ( ',' StdIdent )* ;
+
+
+/* * *   T e r m i n a l   S y m b o l s   * * */
+
+/* Identifier */
+
+StdIdent :=
+  Letter ( Letter | Digit )* ;
+
+
+/* Title-Case or Snake-Case Identifier */
+
+TitleOrSnakeCaseIdent :=
+  TitleCaseIdent | SnakeCaseIdent ;
+
+
+ /* Title-Case Identifier */
+
+TitleCaseIdent :=
+  ( CaoitalLetter ( LowerCaseLetter | Digit )+ )+ ;
+
+
+ /* Snake-Case Identifier */
+
+SnakeCaseIdent :=
+  LowerCaseIdent ( '_' LowerCaseIdent )* ;
+
+
+/* Lowercase Identifier */
+
+LowerCaseIdent :=
+  LowerCaseLetter ( LowerCaseLetter | Digit )* ;
+
+
+/* Number Literal */
+
+NumberLiteral := Digit+ ( "'" Digit+ )* ;
+
+
+/* Digit */
+
+Digit := "0" .. "9" ;
+
+
+/* Digit Pair */
+
+DigitPair := Digit Digit ;
+
+
+/* Address Literal */
+
+AddressLiteral := '0x' Base16DigitSeq ;
+
+
+/* Base-16 Digit Sequence */
+
+.Base16DigitSeq :=
+  DigitOrAtoF+ ( "'" DigitOrAtoF+ )* ;
+
+
+/* Digit or A to F */
+
+DigitOrAtoF :=
+  Digit | "A" | "B" | "C" | "D" | "E" | "F" ;
+
+
+/* Character Code */
+
+CharacterCode := '0u' Base16DigitSeq ;
+
+
+/* * *   C h a r a c t e r   S t r i n g s   * * */
+
+/* String Literal */
+
+StringLiteral :=
+  SingleQuotedString | DoubleQuotedString ;
+
+
+/* Single-Quoted String Literal */
+
+.SingleQuotedString :=
+  "'" ( QuotableCharacter | '"' )* "'" ;
+
+
+/* Double-Quoted String Literal */
+
+.DoubleQuotedString :=
+  '"' ( QuotableCharacter | "'" )* '"' ;
+
+
+/* Quotable Character */
+
+.QuotableCharacter :=
+  Digit | Letter | Space | EscapedCharacter |
+  NonAlphaNumQuotable | extUnicodeCharacter ;
+
+/* Letter */
+
+.Letter := 'a' .. 'z' | 'A' .. 'Z' ;
+
+/* Whitespace */
+
+.Space := 0u20 ;
+
+/* Escaped Character */
+
+.EscapedCharacter :=
+  '\' ( 'n' | 't' | '\' ) ;
+
+/* Non-Alphanumeric Quotable Character */
+
+.NonAlphaNumQuotable :=
+  '!' | '#' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' |
+  '-' | '.' | '/' | ':' | ';' | '<' | '=' | '>' | '?' | '@' |
+  '[' | '\' | ']' | '^' | '_' | '`' | '{' | '|' | '}' | '~' ;
+
+
+.ExtUnicodeCharacter :=
+  <Unicode characters with code points above U+009F>
+
+
+/* * *   I g n o r e   S y m b o l s   * * */
+
+/* Whitespace */
+
+Whitespace :=
+  Space | Tabulator ;
+
+.Space := 0u20 ;
+
+.Tabulator := 0u9 ;
+
+
+/* End of Line Marker */
+
+EndOfLine :=
+  LF | CR ( LF )? ;
+
+/* ASCII LF */
+
+.LF := 0uA ;
+
+/* ASCII CR */
+
+.CR := 0uD ;
+
+
+endg.
