@@ -1,0 +1,22 @@
+name: Auto-Sync llms.txt
+on:
+  push:
+    paths:
+      - 'README.md'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Copy README to llms.txt
+        run: cp README.md llms.txt
+
+      - name: Commit and Push llms.txt
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://
