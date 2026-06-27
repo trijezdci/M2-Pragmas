@@ -41,7 +41,7 @@ The compiler's driver needs to be modifed to register callback functions with th
 The client compiler's lexer needs to be modified to consume pragmas including their delimiters, then pass a `PRAGMA` token to its parser along with a reference to the lexeme of the consumed pragma block.
 
 #### Parser
-The parser needs to be modified to recognise the `PRAGMA` token and to call the pragma parsing library's pragma parser via its API passing it the reference to the lexeme of the pragma block to be parsed. It further needs to be modified to interpret the data structure passed back and determine from the pragma type whether the pragma is permitted at the current location, further decorating the current AST node with the information returned by the pragma parser.
+The parser needs to be modified to recognise the `PRAGMA` token and to call the pragma parsing library's pragma parser via its API, passing it the reference to the lexeme of the pragma block to be parsed. It further needs to be modified to interpret the data structure passed back and determine from the pragma type whether the pragma is permitted at the current location, further decorating the current AST node with the information returned by the pragma parser.
 
 #### Code Analyser
 
