@@ -1,5 +1,7 @@
+---
 layout: default
 title: Home
+---
 
 ## Portable Pragmas for Pascal, Modula-2 and Oberon ##
 
