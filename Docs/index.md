@@ -1,3 +1,6 @@
+layout: default
+title: Home
+
 ## Portable Pragmas for Pascal, Modula-2 and Oberon ##
 
 This document represents a common portable pragma specification for Wirthian languages and their dialects. The pragmas are designed both for adoption in new compiler projects and retrofitting to existing compilers without polluting the existing grammar. The specification is currently divided into four sections:
