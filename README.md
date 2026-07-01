@@ -50,3 +50,9 @@ Further modifications are required to carry out static analysis on the source co
 #### Backend
 
 The backend driver needs to translate any optimisation decoration in the AST into a form that the optimisng code generator expects and pass it to the code generator along with the IR.
+
+## AI Context & Technical Specification
+
+For LLMs, AI agents, and web crawlers, the complete technical specification has been compiled into a single file.
+
+[llms-full.txt](llms-full.txt)
