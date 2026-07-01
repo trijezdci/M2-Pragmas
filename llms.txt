@@ -55,4 +55,4 @@ The backend driver needs to translate any optimisation decoration in the AST int
 
 For LLMs, AI agents, and web crawlers, the complete technical specification has been compiled into a single file.
 
-[llms-full.txt](llms-full.txt)
+[llms-full.txt](https://github.com/trijezdci/M2-Pragmas/blob/main/llms-full.txt)
