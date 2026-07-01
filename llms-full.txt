@@ -1,0 +1,1722 @@
+# Portable Pragmas for Pascal, Modula-2 and Oberon #
+
+This document represents a common portable pragma specification for Wirthian languages and their dialects. The pragmas are designed both for adoption in new compiler projects and retrofitting to existing compilers without polluting the existing grammar. The specification is currently divided into four sections:
+
+### Pragma Scopes ###
+[Pragma Scopes](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes)
+
+### Pragma Placement ###
+[Pragma Placement](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Placement)
+
+### Pragma Specification ###
+[Pragma Specification](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification)
+
+### Pragma Grammar ###
+
+#### Syntax Diagrams ####
+[Syntax Diagrams](https://github.com/trijezdci/M2-Pragmas/blob/main/grammar/Syntax-Diagrams)
+
+#### EBNF ####
+[EBNF](https://github.com/trijezdci/M2-Pragmas/blob/main/grammar/pragma-grammar.gll)
+
+---
+
+## Pragma Facilities
+
+Pragmas are non-semantic directives &mdash; instructions to the language processor to control or influence the compilation process but do not alter the semantics of the compiling source code.
+
+This specification distinguishes two kinds:
+* standard pragmas
+* implementation defined pragmas
+
+**Standard Pragmas** are compiler independent, designed to be portable.
+
+**Implementation Defined Pragmas** are specific to the language processor and thus non-portable.
+
+### Pragma Symbol Naming
+* Pragma symbols of standard pragmas are always in all-uppercase
+* Pragma symbols of implementation defined pragmas must be in title case or snake case.
+* Denoters of implementation defined pragmas are qualified with an implementation prefix.
+* The implementation prefix is always in lowercase.
+
+
+### Standard Pragmas
+
+The following standard pragmas are defined:
+
+[`ABI`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-abi),
+[`ADDR`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-addr),
+[`ALIGN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[`ANYORDER`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-anyorder),
+[`ARC`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-arc),
+[`BORROWER`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[`CONTIGUOUS`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-contiguous),
+[`DEPRECATED`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated),
+[`DETM`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-detm),
+[`ENCODING`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-encoding),
+[`ENDFWD`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-endfwd),
+[`FFI`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffi),
+[`FFIDENT`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident),
+[`FORWARD`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-forward),
+[`GENERATED`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-generated),
+[`GC`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-cg),
+[`IN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[`INLINE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-inline),
+[`LEADBITS`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-leadbits),
+[`LOWLATENCY`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[`MEMALIGN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-memalign),
+[`MSG`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-msg),
+[`NOINLINE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-noinline),
+[`NORETURN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-noreturn),
+[`OUT`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out),
+[`OWNER`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner),
+[`PACKED`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-packed),
+[`PADBITS`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-padbits),
+[`PRESETS`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-presets),
+[`PRIVATETO`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-privateto),
+[`PURE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-pure),
+[`RANGE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-range),
+[`RELEASE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-release),
+[`RESIDENT`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-resident),
+[`RETAIN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-retain),
+[`SINGLEASSIGN`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-singleassign),
+[`TELL`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-tell),
+[`TICKET`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ticket),
+[`UNSET`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-unset),
+[`VARIANT`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-variant),
+[`VOLATILE`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-volatile),
+[`WEAK`](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-weak).
+
+
+#### Pragma ABI
+An `ABI` pragma may follow the module identifier in the header of an implementation module and establishes the calling
+convention of the specified foreign API, language and its execution environment for the module.
+
+```antlr
+pragmaABI := ’<*’ ABI ’=’ CallingConvention ’*>’ ;
+
+.CallingConvention := ’"C"’ | ’"CLR"’ | ’"JVM"’ ;
+```
+
+```Modula-2
+(* Modula-2 implementation of the C stdio library *)
+IMPLEMENTATION MODULE stdio <*ABI="C"*>;
+```
+
+
+#### Pragma ADDR
+
+Pragma `ADDR` maps a procedure or a global variable to a fixed memory address.
+
+```antlr
+pragmaADDR := ’<*’ ADDR '=' constExpr ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Reset <*ADDR=0x12*>;
+```
+
+
+#### Pragma ALIGN
+
+Pragma `ALIGN` controls field alignment within records. The alignment is specified in octets and may not be zero.
+
+```antlr
+pragmaALIGN := ’<*’ ALIGN '=' constExpr ’*>’ ;
+```
+
+
+When the pragma is placed at the end of a record header, it has record scope and it determines the default alignment for field definitions without alignment pragmas.
+
+```Modula-2
+TYPE Aligned = RECORD <*ALIGN=2*> (* 16-bit default field alignment *)
+  ...
+END; (* Aligned *)
+```
+
+When the pragma is placed within a field list definition of a record type, it has field list scope and it determines the alignment of the field list.
+
+
+```Modula-2
+TYPE Aligned = RECORD
+  foo, bar : INTEGER <*ALIGN=2*> ; (* 16-bit aligned *)
+  baz, bam : INTEGER <*ALIGN=4*> ; (* 32-bit aligned *)
+END; (* Aligned *)
+```
+
+When the pragma is placed after a field identifier, it has field list item scope and it determines the alignment of the field.
+
+```Modula-2
+TYPE Aligned = RECORD <*ALIGN=4*>
+  foo <*ALIGN=2*>, bar : INTEGER  ; (* foo is 16-bit aligned, bar is 32-bit aligned *)
+  baz, bam <*ALIGN=2*> : INTEGER  ; (* baz is 32-bit aligned, bam is 16-bit aligned *)
+END; (* Aligned *)
+```
+
+
+#### Pragma ANYORDER
+
+Pragma `ANYORDER` represents a permission for the language processor to reorder fields in a record when space optimisation has been requested. The pragma has [record scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#record-scope).
+
+```antlr
+pragmaANYORDER := ’<*’ ANYORDER ’*>’ ;
+```
+
+```Modula-2
+TYPE Foo = RECORD <*ANYORDER*>
+  ch1 : CHAR;
+  int : INTEGER;
+  ch2 : CHAR
+END; (* Foo *)
+```
+
+
+#### Pragma ARC
+
+Pragma `ARC` marks a module or a data type as requiring automatic reference counting. The pragma must be placed in both the interface and implementation or both the declaration and definition. A supporting language processor shall use the marking alongside pragmas `OWNER`, `BORROWER`, `RETAIN` and `RELEASE` to inject retain and release procedure calls where necessary in order to facilitate automatic reference counting.
+
+
+```antlr
+pragmaARC := ’<*’ ARC ’*>’ ;
+```
+
+```Modula-2
+INTERFACE MODULE Foobar <*ARC*>;
+```
+
+
+#### Pragma BORROWER
+
+Pragma `BORROWER` marks a formal parameter, a local variable or a record field as _borrower_ of a reference counted object. This property is also known as a _weak reference_. When used with a formal parameter, it must be present in both the procedure's declaration and definition.  The use of pragmas `OWNER` and `BORROWER` with any given entity is mutually exclusive.
+
+
+```antlr
+pragmaBORROWER := ’<*’ BORROWER ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Length ( VAR s : String <*BORROWER*> ) : CARDINAL; (* returns length, does not pass ownership *)
+```
+
+
+#### Pragma CONTIGUOUS
+
+Pragma `CONTIGUOUS` marks a type as contiguous. This represents a request to keep instances of the type in contiguous memory and thus keeping it from being split up into non-contiguous segments. A compile time warning shall be emitted if the suggestion is not followed.
+
+
+```antlr
+pragmaCONTIGUOUS := ’<*’ CONTIGUOUS ’*>’ ;
+```
+
+```Modula-2
+TYPE Buffer = ARRAY 512 OF OCTET <*CONTIGUOUS*>;
+```
+
+
+#### Pragma DEPRECATED
+
+A `DEPRECATED` pragma marks a constant, a variable, a type or a procedure as deprecated. When the identifier of a deprecated entity is used, a compile time warning is issued. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaDEPRECATED := ’<*’ DEPRECATED ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Foo ( bar : Bar ) <*DEPRECATED*>;
+```
+
+
+#### Pragma DETM
+
+Pragma `DETM` marks a function as *deterministic*. The pragma is placed within the procedure header of both the function declaration and definition. A *deterministic* function may cause side effects but is not impacted by non-local state. Marking a function *deterministic* thus constitutes a promise for the function not to read non-local state, and to only call other functions either marked *pure* or *deterministic*. If the promise is not kept, a compile time warning shall be emitted. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaDETM := ’<*’ DETM ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE foo ( bar : Bar ) : Baz <*DETM*> ; (* will not read but may modify non-local state *)
+```
+
+
+#### Pragma ENCODING
+
+Pragma `ENCODING` specifies the character encoding of the enclosing source file.
+
+```antlr
+pragmaENCODING := ’<*’ ENCODING '=' ( '"ASCII"' | '"UTF8"' ) ( ':' codePointSampleList )? ’*>’ ;
+
+codePointSampleList := codePointSample ( ',' codePointSample )* ;
+
+codePointSample := quotedCharacterLiteral '=' characterCode ;
+
+alias quotedCharacterLiteral = StringLiteral ;
+
+alias characterCode = NumberLiteral ;
+```
+
+The pragma controls which characters are permitted within quoted literals and comments within the enclosing source file.
+
+| BOM       | Encoding      | Characters Permitted in Quoted Literals and Comments      |
+|:---------:|:-------------:|:---------------------------------------------------------:|
+| No BOM    | not specified | only characters permitted by the grammar                  |
+|           | `ASCII`       |                                                           |
+|           | `UTF8`        | additionally any printable character encodable in UTF8    |
+| UTF8 BOM  | not specified | only characters permitted by the grammar                  |
+|           | `ASCII`       |                                                           |
+|           | `UTF8`        | additionally any printable character encodable in UTF8    |
+| Other BOM | mandatory     | Support is implementation defined;                        |
+|           |               | BOM and encoding specifier must match.                    |
+
+An implementation that supports ASCII only, shall recognise encoding specifier `ASCII` and ignore any UTF8 BOM but reject any non-ASCII characters within the source file. An implementation that supports UTF8 shall recognise encoding specifiers `ASCII` and `UTF8`. Support for any other encodings is implementation defined. Only one encoding pragma per source file is permitted.
+
+##### Encoding Verification
+
+The encoding specifier may be followed by a comma separated list of arbitrary code point samples. Each sample consists of a quoted character and its respective character code. If samples are chosen wisely, three or four samples will suffice to verify the encoding with near 100% certainty. Such a sample list for UTF8 is given in the example below.
+
+```Modula-2
+<*ENCODING="UTF8" : "é"=0uE9, "€"=0u20AC, "¥"=0uA5, "§"=0uA7*>
+```
+
+If a sample list is specified, a verification shall be carried out by matching the quoted literals in the sample list with their respective character codes. Any mismatch shall cause a fatal compilation error and abort. A list shall not contain more than eight samples. Excess samples shall be ignored and a warning shall be emitted.
+
+
+#### Pragma ENDFWD
+
+Pragma `ENDFWD` marks the end of a forward declaration section.
+
+```antlr
+pragmaENDFWD := '<*' ENDFWD '*>' ;
+```
+
+
+#### Pragma FFI
+An `FFI` pragma may follow the module identifier in the header of an interface module and establishes the calling
+convention of the specified foreign API, language and its execution environment for the module.
+
+```antlr
+pragmaFFI := ’<*’ FFI ’=’ CallingConvention ’*>’ ;
+
+.CallingConvention := ’"C"’ | ’"CLR"’ | ’"JVM"’ ;
+```
+
+```Modula-2
+(* Modula-2 interface to the C stdio library *)
+INTERFACE MODULE CStdIO <*FFI="C"*>;
+```
+
+
+#### Pragma FFIDENT
+
+An `FFIDENT` pragma may follow the identifier of a constant, type, variable, procedure or function definition or
+declaration to map the identifier to the foreign API/ABI identifier specified in the pragma body. This pragma is
+only valid within a module whose module header has been marked with the ABI or FFI pragma.
+
+```antlr
+pragmaFFIDENT := ’<*’ FFIDENT ’=’ ForeignIdentifier ’*>’ ;
+
+alias ForeignIdentifier = QuotedLiteral ;
+```
+
+```Modula-2
+(* Interface to an OpenVMS SMG library routine *)
+PROCEDURE PasteVirtualDisplay <*FFIDENT="SMG$PASTE_VIRTUAL_DISPLAY"*>
+  ( displayID, pasteboardID : INTEGER; row, column : INTEGER ) : CARDINAL;
+```
+
+
+#### Pragma FORWARD
+
+Pragma `FORWARD` marks the beginning of a forward declaration section. The section is terminated by pragma `ENDFWD`. Ideally, an external preprocessor should be used to automatically insert forward declaration sections into the source code prior to compilation on a single-pass compiler. Such a preprocessor may also be used to remove any forward declaration sections prior to committing source code to a repository. In the event that source code containing one or more forward declaration sections is compiled on a multi-pass compiler, source text between pragmas `FORWARD` and `ENDFWD` may be silently skipped without any further syntax analysis.
+
+```antlr
+pragmaFORWARD := '<*' FORWARD '*>' ;
+```
+
+```Modula-2
+<*FORWARD*> PROCEDURE Foo ( bar : Bar ); <*ENDFWD*>
+PROCEDURE Baz ( bar : Bar );
+BEGIN Foo(bar) END Baz;
+```
+
+
+#### Pragma GC
+
+Pragma `GC` marks a module as either providing or requiring a garbage collecting memory allocator. The pragma must be placed in both the interface and implementation. If any procedure within a library module marked with the pragma calls an allocator not marked with the pragma, either directly, or indirectly via the Wirthian Macro `NEW` a compile time warning shall be emitted. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaGC := ’<*’ GC ’*>’ ;
+```
+
+```Modula-2
+INTERFACE MODULE Foobar <*GC*>;
+```
+
+
+#### Pragma GENERATED
+
+Pragma `GENERATED` represents a factory mark embedded within a source file that was generated by a template engine. It is intended to be automatically inserted by the engine that generated the source file. The pragma encodes the name of the template the source file was generated from, and the date and time when it was last generated. An implementation may use the information encoded within the pragma body to avoid unnecessary regeneration of libraries.
+
+```antlr
+pragmaGENERATED := ’<*’ GENERATED FROM template ',' datestamp ',' timestamp ’*>’ ;
+
+template := StdIdent;
+
+datestamp := year '-' month '-' day ;
+
+timestamp := hours ':' minutes ':' seconds '+' timezone ;
+```
+
+```Modula-2
+<*GENERATED FROM AssocArrays, 2024-12-31, 23:59:59+0100*>
+```
+
+
+#### Pragma IN
+
+Pragma `IN` represents a *promise **not** to write* to a formal `VAR` parameter `v` marked by the pragma within in the header of a procedure `p` as an `IN` parameter. The promise is kept if the language processor can prove that `v` is not written to within the
+body of `p` in every possible runtime scenario, by absence of assignment and by not passing `v` to any `VAR` parameter not marked as an `IN` parameter in a procedure call other than via procedure variable. A compile time warning shall be emitted if the promise is not kept. A compiler switch may be provided to promote the warning to an error.
+
+```antlr
+pragmaIN := ’<*’ IN ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE WriteString ( VAR s : ARRAY OF CHAR <*IN*> );
+```
+
+
+#### Pragma INLINE
+
+An `INLINE` pragma represents a request to inline calls to a procedure so marked, in effect treating it as a macro. The request is a mandate for functions that return a property. Other requests may be declined, but should generally be fulfilled within reason*. When a request is declined, a compile time informational message shall be emitted.
+
+```antlr
+pragmaINLINE := ’<*’ INLINE ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE colour ( point : Point ) : Colour <*INLINE*>;
+```
+
+[*] The implementors of a compiler backend generally know better when to optimise than the users of their product.
+
+
+#### Pragma LEADBITS
+
+Pragma `LEADBITS` directs the language processor to inserts a specified number of padding bits at the start of a field list sequence within a record. Permitted values range from one to 256 bits. The pragma is only permitted within packed record type definitions.
+
+```antlr
+pragmaLEADBITS := ’<*’ LEADBITS '=' constExpr ’*>’ ;
+```
+
+```Modula-2
+TYPE Packed = RECORD <*PACKED; LEADBITS=2*>
+  oneBit    : [0..1] OF OCTET; (* 1 bit *)
+  twoBits   : [0..3] OF OCTET; (* 2 bits *)
+  threeBits : [0..7] OF OCTET; (* 3 bits *)
+END; (* Packed *)
+```
+
+
+#### Pragma LOWLATENCY
+
+Pragma `LOWLATENCY` marks a formal parameter or a local variable as latency critical. It represents a *suggestion* to the language processor to optimise access time for example by mapping the parameter or variable to a processor register. An informational compile time message shall be emitted if the suggestion is not followed.
+
+```antlr
+pragmaLOWLATENCY := ’<*’ LOWLATENCY ’*>’ ;
+```
+
+```Modula-2
+VAR foo : INTEGER <*LOWLATENCY*>;
+```
+
+
+#### Pragma MEMALIGN
+
+Pragma `ALIGN` controls memory alignment. The alignment is specified in octets and may not be zero.
+
+```antlr
+pragmaMEMALIGN := ’<*’ MEMALIGN '=' constExpr ’*>’ ;
+```
+
+When the pragma is placed within a module header, it has module scope and determines the default memory alignment within the module.
+
+```Modula-2
+INTERFACE MODULE Foolib <*MEMALIGN=8*> ;
+```
+
+When the pragma is placed within a constant definition, it has constant scope and determines the memory alignment of the constant.
+
+```Modula-2
+CONST Table = { 10, 20, 30, 40, 50 } <*MEMALIGN=4*> ;
+```
+
+When the pragma is placed within a type definition, it has type definition scope and it determines the memory alignment of instances of the type.
+
+```Modula-2
+TYPE Buffer = ARRAY 512 OF OCTET <*MEMALIGN=8*> ;
+```
+
+
+#### Pragma MSG
+
+Pragma `MSG` represents a directive to emit user defined console messages during compilation. There are four types of messages: informational messages, warnings, error messages and fatal error messages. A message mode selector determines the message type. Console messages consist of a quoted string literal, the value of a compile time constant or value pragma, or a comma separated list of these components. A value pragma is a pragma that represents a compile time setting.
+
+```antlr
+pragmaMSG :=
+  '<*' MSG '=' msgMode ':' msgComponent ( ',' msgComponent )* '*>' ;
+
+.msgMode :=
+  INFO | WARN | ERROR | FATAL ;
+
+msgComponent :=
+  String | constQualident | '$(' valuePragmaDenoter ')'
+
+.valuePragmaDenoter := ENCODING | MEMALIGN | ImplDefinedValuePragmaDenoter ;
+
+```
+
+A value pragma is dereferenced by enclosing its pragma denoter in parentheses prefixed by a dollar sign.
+
+```Modula-2
+<*MSG=INFO : "The current memory alignment value is ", $(MEMALIGN)*>
+```
+
+#### Message Mode INFO ####
+
+Message mode selector `INFO` is used to emit user defined information during compilation. Emitting an informational message does not change the error or warning count of the current compilation run and it does not cause compilation to fail or abort. A compiler switch may be provided to silence informational messages.
+
+```Modula-2
+<*MSG=INFO : "Library documentation is available at http://foolib.org"*>
+```
+
+#### Message Mode WARN ####
+
+Message mode selector `WARN` is used to emit user defined warnings during compilation. Emitting a warning message increments the warning count of the current compilation run but does not cause compilation to fail or abort.
+
+```Modula-2
+<*MSG=WARN : "foo exceeds maximum value. A default value of 100 will be used instead."*>
+```
+
+##### Message Mode ERROR
+
+Message mode selector `ERROR` is used to emit user defined error messages during compilation. Emitting an error message increments the error count of the current compilation run and causes compilation to fail but will not cause an abort.
+
+```Modula-2
+<*MSG=ERROR : "Value of foo is outside of its legal range of [1..100]."*>
+```
+
+##### Message Mode FATAL
+
+Message mode selector `FATAL` is used to emit user defined fatal error messages during compilation. Emitting a fatal error message increments the error count of the current compilation run and causes the compilation to fail and abort immediately.
+
+```Modula-2
+<*MSG=FATAL : "Unsupported target architecture."*>
+```
+
+
+#### Pragma NOINLINE
+
+Pragma `NOINLINE` represents a _mandate_ that a procedure shall **not** be inlined. It must appear both in the procedure's definition and declaration. The use of pragmas `INLINE` and `NOINLINE` with any given procedure is mutually exclusive.
+
+```antlr
+pragmaNOINLINE := ’<*’ NOINLINE ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Draw ( point : Point ) <*NOINLINE*>;
+```
+
+
+#### Pragma NORETURN
+
+Pragma `NORETURN` marks a regular procedure as non-returning. It represents a promise never to return in any runtime scenario. A compile time warning shall be emitted if the language processor cannot prove that the promise is kept. A compiler switch may be provided to promote the warning to an error.
+
+```antlr
+pragmaNORETURN := ’<*’ NORETURN ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE RebootSystem <*NORETURN*>;
+```
+
+
+#### Pragma OUT
+
+Pragma `OUT` represents a *promise to write* to a formal `VAR` parameter `v` marked by the pragma within in the header of a procedure `p` as an `OUT` parameter. The promise is kept if the language processor can prove that `v` is written to with the
+body of `p` in every possible runtime scenario, either by assignment or by passing `v` to an `OUT` parameter in a procedure call
+other than via procedure variable. A compile time warning shall be emitted if the promise is not kept. A compiler switch may be provided to promote the warning to an error.
+
+```antlr
+pragmaOUT := ’<*’ OUT ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Init ( VAR i : INTEGER <*OUT*> );
+```
+
+
+#### Pragma OWNER
+
+Pragma `OWNER` marks a formal parameter, a local variable or a record field as _owner_ of a reference counted object. This property is also known as a _strong reference_. When used with a formal parameter, it must be present in both the procedure's declaration and definition.  The use of pragmas `OWNER` and `BORROWER` with any given entity is mutually exclusive.
+
+
+```antlr
+pragmaOWNER := ’<*’ OWNER ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE New ( VAR s : String <*OWNER*> ); (* allocates new String object and passes ownership to s *)
+```
+
+
+#### Pragma PACKED
+
+Pragma `PACKED` within a record type definition marks the type as packed. When packing is specified, the allocation size of a field of an anonymous subrange of type `OCTET`, `CARDINAL` and `LONGCARD` is reduced to the smallest bit width required to encode its value range. Fields of any other type are aligned on octet boundaries.
+
+```antlr
+pragmaPACKED := ’<*’ PACKED ’*>’ ;
+```
+
+
+#### Pragma PADBITS
+
+Pragma `PADBITS` directs the language processor to append a specified number of padding bits to one or more fields within a record. Permitted values range from one to 256 bits. The pragma is only permitted within packed record type definitions.
+
+```antlr
+pragmaPADBITS := ’<*’ PADBITS '=' constExpr ’*>’ ;
+```
+
+```Modula-2
+TYPE Packed = RECORD <*PACKED*>
+  oneBit    : [0..1] OF OCTET <*PADBITS=2*>; (* 1 bit data + 2 bits padding *)
+  twoBits   : [0..3] OF OCTET;               (* 2 bits data, no padding *)
+  threeBits : [0..7] OF OCTET                (* 3 bits data, no padding *)
+END; (* Packed *)
+```
+
+
+#### Pragma PRESETS
+
+The `PRESETS` pragma represents a directive to read and apply compiler settings from an external pragma file. It may be placed anywhere before or after a token in a compilation unit. The pragma lists one or more pragma files without their suffixes. A compile time warning shall be emitted if any given pragma file cannot be found. A compiler switch may be provided to promote the warning to an error.
+
+```antlr
+pragmaPRESETS := ’<*’ PRESETS '=' identList ’*>’ ;
+```
+
+```Modula-2
+MODULE Main; <*PRESETS=common, fooproj*>
+```
+
+A pragma file may contain any number of block comments, any number of `MSG` and `TELL` pragmas, and any number of implementation defined pragmas for compiler settings, in any order, but not any other syntax.
+
+```antlr
+pragmaFile :=
+  ( blockComment* externalPragmas* )* ;
+
+externalPragmas :=
+  pragmaMSG | pragmaTELL | inPragFileImplDefPragmaBlock ;
+
+inPragFileImplDefPragmaBlock :=
+  '<*' inPragFileImplDefPragmaDenoter ( ';' inPragFileImplDefPragmaDenoter )* '*>' ;
+
+inPragFileImplDefPragmaDenoter :=
+  ( implPrefix '.' )? ImplDefPragmaSymbol ;
+
+alias implPrefix = lowerCaseIdent ;
+alias implDefPragmaSymbol = TitleOrSnakeCaseIdent ;
+```
+
+The filename of a pragma file consists of its basename, the short identifier of the language processor and a suffix identifying the file as a pragma file. Each supporting language processor shall automatically select pragma files whose implementation identifier matches that of the processor.
+
+```antlr
+pragmaFileName := basename '.' compilerID '.prag' ;
+```
+
+
+#### Pragma PRIVATETO
+
+A `PRIVATETO` pragma may follow the identifier in the header of a definition or interface module and marks the module for private use by modules listed in its body. When such a module is imported by any module not listed, a compile time warning shall be emitted. A compiler switch shall be provided to promote the warning to an error. The pragma is intended as a better alternative to local modules.
+
+```antlr
+pragmaPRIVATETO := ’<*’ PRIVATETO '=' identList ’*>’ ;
+```
+
+```Modula-2
+INTERFACE MODULE Filesys0 <*PRIVATETO=Filesys*>;
+```
+
+
+#### Pragma PURE
+
+Pragma `PURE` marks a function as *pure*. The pragma is placed within the procedure header of both the function declaration and definition. A *pure* function does not cause any side effects and is not impacted by non-local state. Marking a function *pure* thus constitutes a promise for the function not to read nor modify non-local state, and to only call other functions marked *pure*. If the promise is not kept, a compile time warning shall be emitted. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaPURE := ’<*’ PURE ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE foo ( bar : Bar ) : Baz <*PURE*> ; (* will not read nor modify non-local state *)
+```
+
+
+#### Pragma RANGE
+
+Pragma `RANGE` marks an integer type or field in Oberon as a subrange type with the lower and upper bounds given in the pragma's body. The language processor or an external tool can then carry out static range checking and emit a warning if an out of bounds value is assigned.
+
+```antlr
+pragmaRANGE := ’(*$’ RANGE '(’ lowerBound '..' upperBound ')' '*)’ ;
+```
+
+```oberon
+TYPE Months = INTEGER (*$RANGE(1..12)*);
+```
+
+
+#### Pragma RELEASE
+
+Pragma `RELEASE` marks a procedure as decrementing the reference count for the type of its argument. It must appear both in the procedure's definition and declaration. The use of pragmas `RETAIN` and `RELEASE` with any given procedure is mutually exclusive.
+
+```antlr
+pragmaRELEASE := ’<*’ RELEASE ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Release ( s : String ) <*RELEASE*>;
+```
+
+
+#### Pragma RESIDENT
+
+Pragma `RESIDENT` marks a type as resident. This represents a request to keep instances of the type in resident memory and thus keeping it from being swapped to secondary storage and from being relocated during garbage collection sweeps. A compile time warning shall be emitted if the suggestion is not followed.
+
+```antlr
+pragmaRESIDENT := ’<*’ RESIDENT ’*>’ ;
+```
+
+```Modula-2
+TYPE ResBuf = ARRAY 512 OF OCTET <*RESIDENT*>;
+```
+
+
+#### Pragma RETAIN
+
+Pragma `RETAIN` marks a procedure as incrementing the reference count for the type of its argument. It must appear both in the procedure's definition and declaration. The use of pragmas `RETAIN` and `RELEASE` with any given procedure is mutually exclusive.
+
+```antlr
+pragmaRETAIN := ’<*’ RETAIN ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE Retain ( s : String ) <*RETAIN*>;
+```
+
+
+#### Pragma SINGLEASSIGN
+
+Pragma `SINGLEASSIGN` marks a variable as a single-assignment variable. Such a variable should be assigned to only once in every possible runtime scenario. A compile time warning shall be emitted for any violation the language processor detects. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaSINGLEASSIGN := ’<*’ SINGLEASSIGN ’*>’ ;
+```
+
+```Modula-2
+VAR foo : INTEGER <*SINGLEASSIGN*>;
+```
+
+
+#### Pragma TELL
+
+Pragma `TELL` is a directive for pragma related introspection. It may be used for symbol inspection, listing all pragmas used to mark a given symbol, or for pragma inspection, testing whether a given pragma is supported and printing the current value of a value pragma to the console.
+
+```antlr
+pragmaTELL :=
+  "<*" TELL ( symbolInspection | pragmaInspection ) "*>" ;
+
+.symbolInspection := Qualident ;
+
+pragmaInspection :=
+  ( pragmaTestExpr | pragmaValueExpr ) userDefinedMsg? ;
+  
+.pragmaTestExpr := "?(" pragmaDenoter ")" ;
+
+.pragmaValueExpr := "$(" pragmaDenoter ")" ;
+
+userDefinedMsg := ":" customMsg ( "|" altCustomMsg )?
+
+.customMsg := msgMode msgText? ; /* used if true */
+
+alias altCustomMsg = customMsg ; /* used if false */
+
+.pragmaDenoter :=
+  ABI | ADDR | ALIGN | ANYORDER | ARC | BORROWER | CONTIGUOUS | DEPRECATED |
+  DETM | ENCODING | ENDFWD | FFI | FFIDENT | FORWARD | GC | GENERATED | IN |
+  INLINE | LEADBITS | LOWLATENCY | MEMALIGN | MSG | NOINLINE | NORETURN |
+  OUT | OWNER | PACKED | PADBITS | PRESETS | PRIVATETO | PURE | RANGE |
+  RELEASE | RESIDENT | RETAIN | SINGLEASSIGN | TELL | TICKET | UNSET |
+  VARIANT | VOLATILE | WEAK | implDefPragmaDenoter ;
+
+msgText :=
+  String | constQualident ;
+```
+
+##### Pragma Lookup for a Symbol
+
+```Modula-2
+<*TELL Foo.bar*> (* lists all pragmas for field bar of record type Foo. *)
+```
+
+##### Testing the Presence of a Pragma
+
+```Modula-2
+<*TELL ?(ADDR) : INFO "Pragma ADDR is supported." | FATAL "Pragma ADDR is not supported."*>
+```
+
+##### Printing the Value of a Value Pragma
+
+```Modula-2
+<*TELL $(JollyM2.UnrollLoops) : INFO "Loop unrolling is ON." | WARN "Loop unrolling is OFF."*>
+```
+
+
+#### Pragma VARIANT
+
+Pragma `VARIANT` tags a file as specific to one or more user defined variants and sub-variants of the source code. The language processor may use the information to detect mismatches between a variant requested in the invocation and the variant or variants encoded in the pragma. A compile time warning shall be emitted when such a mismatch is encountered. A compiler switch may be provided to promote the warning to an error.
+
+
+```antlr
+pragmaVARIANT := ’<*’ VARIANT '=' identList ’*>’ ;
+```
+
+```Modula-2
+<*VARIANT=iso, posix*>
+```
+
+
+#### Pragma TICKET
+
+Pragma `TICKET` represents a reference to an unresolved issue in a bug tracking system. It encodes the ticket number of the unresolved issue. The pragma is intended for automatic insertion and removal by a bug tracking system. An implementation shall emit a warning for every ticket reference found. The warning should emit the ticket number. A compiler switch may be provided to demote the warning to an informational message or to silence the warning altogether.
+
+```antlr
+pragmaTICKET := ’<*’ TICKET '#' TicketNumber ( '[' URL ']' )? ’*>’ ;
+
+alias TicketNumber = NumberLiteral ;
+
+.URL := <RFC3986 compliant URL> ;
+```
+
+```Modula-2
+<*TICKET #123 [https://github.com/m2sf/m2c/issues/123] *>;
+```
+
+
+#### Pragma UNSET
+
+The `UNSET` pragma represents a directive to unset all compiler settings applied by the most recent `PRESETS` pragma. It may be placed anywhere before or after a token in a compilation unit but it may occur only after a corresponding `PRESETS` pragma. A compile time warning shall be emitted if no corresponding `PRESETS` pragma is present. A compiler switch may be provided to promote the warning to an error.
+
+```antlr
+pragmaUNSET := ’<*’ UNSET ’*>’ ;
+```
+
+```Modula-2
+<*PRESETS=foobar*>
+...
+<*UNSET*>
+```
+
+
+#### Pragma VOLATILE
+
+Pragma `VOLATILE` marks a global variable as volatile. By marking a variable volatile, the author states that its value may change during the lifetime of a program even if no write access can be deduced from source code analysis. An implementation shall neither eliminate any variable so marked, nor shall it emit any unused variable warning for any variable so marked.
+
+```antlr
+pragmaVOLATILE := ’<*’ VOLATILE ’*>’ ;
+```
+
+```Modula-2
+VAR foo : INTEGER <*VOLATILE*>;
+```
+
+
+#### Pragma WEAK
+
+Pragma `WEAK` marks a function as *weakly pure*, or in short *weak*. The pragma is placed within the procedure header of both the function declaration and definition. A *weak* function does not cause any side effects but may be impacted by non-local state. Marking a function *weak* thus constitutes a promise for the function not to modify non-local state, and to only call other functions either marked *pure* or *weak*. If the promise is not kept, a compile time warning shall be emitted. A compiler switch shall be provided to promote the warning to an error.
+
+```antlr
+pragmaWEAK := ’<*’ WEAK ’*>’ ;
+```
+
+```Modula-2
+PROCEDURE foo ( bar : Bar ) : Baz <*WEAK*> ; (* may read but will not modify non-local state *)
+```
+
+
+### Implementation Defined Pragmas ###
+
+Implementation defined pragmas are specific to a language processor and should therefore be ignored by other language processors. An implementation defined pragma is preceded with an implementation specific prefix in order to distinguish it from other implementation defined pragmas for other processors that may use the same pragma symbol. When a processor does not understand an implementation defined pragma it will emit an informational message. A compiler switch may be provided to promote the informational message to a warning, error or fatal error message.
+
+```antlr
+ImplDefinedPragma :=
+  ’<*’ ( implPrefix ’.’ )? pragmaSymbol ( ’=’ constExpr )? ’*>’ ;
+
+alias implPrefix, pragmaSymbol = <implementation-defined> ; /* follows StdIdent syntax */
+```
+
+Use of an implementation defined pragma of a fictional compiler is shown below:
+
+```Modula-2
+<*JollyM2.UnrollLoops=TRUE*>
+FOR plane IN array DO
+  FOR row IN plane
+    DO FOR col IN row DO
+      ...
+    END (* FOR *)
+  END (* FOR *)
+END; (* FOR *)
+<*JollyM2.UnrollLoops=FALSE*>
+```
+
+---
+
+## Pragma Scopes
+
+A pragma annotates a syntactic entity is is associated with. The pragma is said to have the scope of the syntactic entity. There are 17 categories.
+
+[File Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#file-scope),
+[Module Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#module-scope),
+[Constant Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#constant-scope),
+[Variable Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#variable-scope),
+[Array Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#array-scope),
+[Record Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#record-scope),
+[Field List Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#field-list-scope),
+[Field List Item Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#field-list-item-scope),
+[Procedure Type Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#procedure-type-scope),
+[Formal Type List Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#formal-type-list-scope),
+[Formal Type List Iten Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#formal-type-list-item-scope),
+[Other Type Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#other-type-scope),
+[Procedure Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#procedure-scope),
+[Parameter List Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#parameter-list-scope),
+[Single Parameter Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#single-parameter-scope),
+[Point-Forward Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#point-forward-scope),
+[No Scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#no-scope).
+
+### Overview
+![pragma scope table](https://github.com/user-attachments/assets/644f0d7c-ff8c-48d0-b338-d30409bc0891)
+
+
+### File Scope
+
+Pragmas with file scope apply to the entire file. The following pragmas **always** have file scope:
+ 
+[**`ENCODING`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-encoding),
+[**`VARIANT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-variant) and
+[**`GENERATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-generated).
+
+
+### Module Scope
+
+Pragmas with module scope apply to the module. The following pragmas **always** have module scope:
+
+[**`PRIVATETO`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-privateto),
+[**`GC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-gc),
+[**`ARC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-arc),
+[**`ABI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-abi) and
+[**`FFI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffi).
+
+
+Whereas the following pragmas **may** have module scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align) and
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+
+
+### Constant Scope
+
+Pragmas with constant scope apply to a constant.
+
+Pragma [**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated)
+may have constant scope, depending on its placement.
+
+
+### Variable Scope
+
+Pragmas with variable scope apply to a variable. The following pragmas **always** have variable scope:
+
+[**`ADDR`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-addr),
+[**`SINGLEASSIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-singleassign) and
+[**`VOLATILE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-volatile).
+
+
+The following pragmas **may** have variable scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated),
+[**`FFIDENT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency) and
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Array Scope
+
+Pragmas with array scope apply to an array type. The following pragmas **may** have array scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align) and
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+
+
+### Record Scope
+
+Pragmas with record scope apply to a record type. The following pragmas **always** have record scope:
+
+[**`LEADBITS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-leadbits) and
+[**`PACKED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-packed).
+
+The following pragmas **may** have record scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align) and
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+
+
+### Field List Scope
+
+Pragmas with field list scope apply to a record field list. The following pragmas **may** have field list scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated) and
+[**`PADBITS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-padbits).
+
+
+### Field List Item Scope
+
+Pragmas with field list item scope apply to a single record field within a field list. The following pragmas **may** have field list item scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated) and
+[**`PADBITS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-padbits).
+
+
+### Procedure Type Scope
+
+Pragmas with procedure type scope apply to a procedure type. The following pragmas **may** have procedure scope, depending on their placement.
+
+[**`DETM`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`INLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`NOINLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`NORETURN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`PURE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident),
+[**`WEAK`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+
+
+### Formal Type List Scope
+
+Pragmas with formal type list scope apply to a procedure type's formal type list. The following pragmas **may** have formal type list scope, depending on their placement.
+
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out) and
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Formal Type List Item Scope
+
+Pragmas with formal type list item scope apply to a single formal type within a procedure type's formal type list. The following pragmas **may** have formal type list item scope, depending on their placement.
+
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out) and
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Other Type Scope
+
+Pragmas with _other type scope_ apply to any type other than record types. The following pragmas **may** have type scope, depending on their placement.
+
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align) and
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+
+
+### Procedure Scope
+
+Pragmas with procedure scope apply to a procedure. The following pragmas **always** have procedure scope:
+
+[**`RELEASE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency) and
+[**`RETAIN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency).
+
+The following pragmas **may** have procedure scope, depending on their placement.
+
+[**`ADDR`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-addr),
+[**`FFIDENT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated),
+[**`DETM`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`INLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`NOINLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`NORETURN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`PURE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident) and
+[**`WEAK`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Parameter List Scope
+
+Pragmas with parameter list scope apply to a procedure's formal parameter list. The following pragmas **may** have parameter list scope, depending on their placement.
+
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out) and
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Parameter List Item Scope
+
+Pragmas with parameter list item scope apply to a single parameter within a procedure's formal parameter list. The following pragmas **may** have parameter list item scope, depending on their placement.
+
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out) and
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner).
+
+
+### Point-Forward Scope
+
+Pragmas with point-forward scope apply from the point forward where they are placed. The following parameters **always** have point-forward scope:
+
+[**`ENDFWD`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-endfwd),
+[**`FORWARD`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-forward),
+[**`PRESETS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-presets) and
+[**`UNSET`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-unset).
+
+
+### No Scope
+
+Pragmas without scope do not apply to any syntactic entity. The following pragmas are **always** without scope:
+
+[**`MSG`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-msg),
+[**`TELL`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-tell) and
+[**`TICKET`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ticket).
+
+---
+
+## Pragma Placement
+
+### Terminology
+
+#### Pragma Block
+
+The largest unit of composition for pragmas is the *pragma block*.
+A *pragma block* consists of an opening and closing delimiter and a *pragma body*.
+
+```antlr
+pragmaBlock := '<*' pragmaBody '*>' ;
+```
+The length of a pragma block including delimiters, line breaks and `NUL` termination shall not exceed a buffer size of 1024 octets.
+
+
+#### Pragma Body
+
+The _pragma body_ consists of one or more *pragma clauses*. There are three categories: standalone clauses, combinable clauses and implementation defined clauses.
+
+```antlr
+pragmaBody := standalonePragmaClause | pragmaClauseSeq | implDefPragmaClause ;
+```
+
+#### Pragma Clause
+
+A *pragma clause* is the smallest unit of composition for pragmas. It consists of one or more tokens that encode the pragma's semantic information.
+
+
+## Pragma Grouping
+
+### Standalone Pragmas
+
+A pragma clause that may not be placed together with other clauses in a single pragma block is called a *standalone pragma clause*. Standalone pragma clauses are:
+
+[**`ENCODING`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-encoding),
+[**`ENDFWD`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-endfwd),
+[**`FORWARD`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-forward),
+[**`GENERATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-generated),
+[**`MSG`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-msg),
+[**`PRESETS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-presets),
+[**`TELL`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-tell),
+[**`TICKET`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ticket),
+[**`UNSET`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-unset) and
+[**`VARIANT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-variant).
+
+### Multi-Clause Pragmas
+
+A pragma clause that may be placed together with other clauses in a single pragma block is called a *combinable pragma clause*. Combinable pragma clauses are:
+
+[**`ABI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-abi),
+[**`ADDR`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-addr),
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`ARC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-arc),
+[**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower),
+[**`CONTIGUOUS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-contiguous),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated),
+[**`DETM`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-detm),
+[**`FFI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffi),
+[**`FFIDENT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident),
+[**`GC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-gc),
+[**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in),
+[**`INLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-inline),
+[**`LEADBITS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-leadbits),
+[**`LOWLATENCY`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-lowlatency),
+[**`MEMALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-memalign),
+[**`NOINLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-noinline),
+[**`NORETURN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-noreturn),
+[**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out),
+[**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner),
+[**`PACKED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-packed),
+[**`PADBITS`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-padbits),
+[**`PRIVATETO`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-privateto),
+[**`PURE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-pure),
+[**`RELEASE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-release),
+[**`RESIDENT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-resident),
+[**`RETAIN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-retain),
+[**`SINGLEASSIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-singleassign),
+[**`VOLATILE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-volatile) and
+[**`WEAK`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-weak).
+
+### Adjacent Pragma Blocks
+
+A pragma block may be followed by one or more adjacent pragma blocks.
+
+
+## Pragma Placement By Scope
+
+### File Scope
+
+Pragmas with [file scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#file-scope) may be placed strictly in order
+
+(1) [**`ENCODING`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-encoding),
+(2) [**`VARIANT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-variant),
+(3) [**`GENERATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-generated)
+
+possibly before or after a comment, but **always before** the module header.
+
+
+### Module Scope
+
+Pragmas with [module scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#module-scope) may be placed at the end of the module header of a top-level module **before** the terminating semicolon. Pragmas must **not** be placed in the header of any local module.
+
+
+### Constant Scope
+
+Pragmas with [constant scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#constant-scope) may be placed at the end of a constant definition **before** the terminating semicolon.
+
+
+### Variable Scope
+
+Pragmas with [variable scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#variable-scope) may be placed at the end of a variable definition **before** the terminating semicolon.
+
+
+### Array Scope
+
+Pragmas with [array scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#array-scope) may be placed at the end of an array type definition **before** the terminating semicolon.
+
+
+### Record Scope
+
+Pragmas with [record scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#record-scope) may be placed at the end of a record type definition's header **before** the field list sequence.
+
+
+### Field List Scope
+
+Pragmas with [field list scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#field-list-scope) may be placed at the end of a record field list **before** the separating semicolon, or the record's terminating `END`.
+
+
+### Field List Item Scope
+
+Pragmas with [field list item scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#field-list-item-scope) may be placed after a field's identifier **before** a separating comma, or the identifier list's terminating colon.
+
+
+### Procedure Type Scope
+
+Pragmas with [procedure type scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#procedure-type-scope) may be placed at the end of a procedure type definition **before** the terminating semicolon.
+
+
+### Formal Type List Scope
+
+Pragmas with [formal type list scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#formal-type-list-scope) may be placed at the end of a formal type list **before** the separating semicolon or the terminating closing parenthesis.
+
+
+### Formal Type List Item Scope
+
+Pragmas with [formal type list item scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#formal-type-list-item-scope) may be placed after a formal type's identifier **before** a separating comma or the formal type list's terminating closing parenthesis.
+
+
+### Other Type Scope
+
+Pragmas with any [other type scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#other-type-scope) may be placed at the end of the type definition **before** the terminating semicolon.
+
+
+### Procedure Scope
+
+Pragmas with [procedure scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#procedure-scope) may be placed at the end of a procedure header **before** the terminating semicolon.
+
+
+### Parameter List Scope
+
+Pragmas with [parameter list scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#parameter-list-scope) may be placed at the end of a formal parameter list **before** the separating semicolon or the terminating closing parenthesis.
+
+
+### Parameter List Item Scope
+
+Pragmas with [parameter list item scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#parameter-list-item-scope) may be placed after a parameter's identifier **before** a separating comma or the parameter list's terminating closing parenthesis.
+
+
+### Point-Forward Scope
+
+Pragmas with [point-forward scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#point-forward-scope) may be placed anywhere within the module body where an import, a declaration or definition, a statement or a comment may appear
+
+
+### No Scope
+
+Pragmas [without scope](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Scopes#no-scope) may be placed anywhere within a source file, after any and all pragmas with file scope, anywhere an import, a declaration or definition, a statement or a comment may appear.
+
+
+## Mutual Exclusion
+
+### Scope Exclusion
+
+No pragma may be placed in a list scope where a pragma has been placed in list item scope.
+
+```modula-2
+TYPE Foo = RECORD
+  a, b : Bar <*ALIGN=2*> ; (* valid *)
+  c <*ALIGN=2*>, d : Baz;  (* valid *)
+  e <*PADBITS=2*>, f : Bam <*ALIGN=2*> (* invalid *)
+END; (* Foo *)
+```
+
+### Logical Exclusion
+
+The following pragmas are mutually exclusive when applied to the same scope or overlapping scope:
+
+* [**`ABI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-abi) and
+ [**`FFI`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffi)
+* [**`ARC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-arc) and
+ [**`GC`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-gc)
+* [**`OWNER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-owner) and
+ [**`BORROWER`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-borrower)
+* [**`PURE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-pure),
+ [**`WEAK`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-weak) and
+ [**`DETM`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-detm)
+* [**`IN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-in) and
+ [**`OUT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-out)
+* [**`INLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-inline) and
+ [**`NOINLINE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-noinline)
+* [**`RELEASE`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-release) and
+ [**`RETAIN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-retain)
+
+---
+
+## Syntax Diagrams
+
+### Non-Terminal Symbols
+
+#### Pragma Blocks
+
+##### pragmaBlock
+
+Pascal | PIM M2 | ISO M2 | M2 R10 | Oberon
+:---: | :---: | :---: | :---: | :---:
+✕ | ✕ | ◯ | ◯ | ✕
+
+![pragmaBlock](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaBlock.png)
+
+##### altPragmaBlock
+
+Pascal | PIM M2 | ISO M2 | M2 R10 | Oberon
+:---: | :---: | :---: | :---: | :---:
+◯ | ◯ | ✕ | ✕ | ◯
+
+![altPragmaBlock](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/altPragmaBlock.png)
+
+##### pragmaBody
+![pragmaBody](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaBody.png)
+
+##### standalonePragmaClause
+![standalonePragmaClause](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/standalonePragmaClause.png)
+
+##### pragmaClauseSeq
+![pragmaClauseSeq](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseSeq.png)
+
+##### combinablePragmaClause
+![combinablePragmaClause](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/combinablePragmaClause.png)
+
+#### Pragma Clauses
+
+##### pragmaClauseABI
+![pragmaClauseABI](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseABI.png)
+
+##### pragmaClauseADDR
+![pragmaClauseADDR](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseADDR.png)
+
+##### pragmaClauseALIGN
+![pragmaClauseALIGN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseALIGN.png)
+
+##### pragmaClauseANYORDER
+![pragmaClauseANYORDER](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseANYORDER.png)
+
+##### pragmaClauseARC
+
+Pascal | PIM M2 | ISO M2 | M2 R10 | Oberon
+:---: | :---: | :---: | :---: | :---:
+✕ | ✕ | ✕ | ◯ | ✕
+
+![pragmaClauseARC](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseARC.png)
+
+##### pragmaClauseBORROWER
+![pragmaClauseBORROWER](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseBORROWER.png)
+
+##### pragmaClauseCONTIGUOUS
+![pragmaClauseCONTIGUOUS](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseCONTIGUOUS.png)
+
+##### pragmaClauseDEPRECATED
+![pragmaClauseDEPRECATED](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseDEPRECATED.png)
+
+##### pragmaClauseDETM
+![pragmaClauseDETM](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseDETM.png)
+
+##### pragmaClauseENCODING
+![pragmaClauseENCODING](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseENCODING.png)
+
+##### codePointSampleList
+![codePointSampleList](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/codePointSampleList.png)
+
+##### codePointSample
+![codePointSample](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/codePointSample.png)
+
+##### pragmaClauseENDFWD
+![pragmaClauseENDFWD](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseENDFWD.png)
+
+##### pragmaClauseFFI
+![pragmaClauseFFI](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseFFI.png)
+
+##### pragmaClauseFFIDENT
+![pragmaClauseFFIDENT](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseFFIDENT.png)
+
+##### pragmaClauseFORWARD
+![pragmaClauseFORWARD](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseFORWARD.png)
+
+##### pragmaClauseGC
+
+Pascal | PIM M2 | ISO M2 | M2 R10 | Oberon
+:---: | :---: | :---: | :---: | :---:
+✕ | ✕ | ✕ | ◯ | ✕
+
+![pragmaClauseGC](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseGC.png)
+
+##### pragmaClauseGENERATED
+![pragmaClauseGENERATED](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseGENERATED.png)
+
+##### template
+![template](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/template.png)
+
+##### dateStamp
+![dateStamp](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/dateStamp.png)
+
+##### year
+![year](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/year.png)
+
+##### month, day
+![month, day](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/month.png)
+
+##### timeStamp
+![timeStamp](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/timeStamp.png)
+
+##### hours, minutes, seconds, tzOffset
+![hours, minutes, seconds, tzOffset](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/hours.png)
+
+##### pragmaClauseIN
+![pragmaClauseIN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseIN.png)
+
+##### pragmaClauseINLINE
+![pragmaClauseINLINE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseINLINE.png)
+
+##### pragmaClauseLEADBITS
+![pragmaClauseLEADBITS](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseLEADBITS.png)
+
+##### pragmaClauseLOWLATENCY
+![pragmaClauseLOWLATENCY](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseLOWLATENCY.png)
+
+##### pragmaClauseMEMALIGN
+![pragmaClauseMEMALIGN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseMEMALIGN.png)
+
+##### pragmaClauseMSG
+![pragmaClauseMSG](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseMSG.png)
+
+##### msgMode
+![msgMode](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/msgMode.png)
+
+##### msgComponent
+![msgComponent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/msgComponent.png)
+
+##### constQualident
+![constQualident](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/constQualident.png)
+
+##### qualident
+![qualident](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/qualident.png)
+
+##### valuePragmaDenoter
+![valuePragmaDenoter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/valuePragmaDenoter.png)
+
+##### pragmaClauseNOINLINE
+![pragmaClauseNOINLINE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseNOINLINE.png)
+
+##### pragmaClauseNORETURN
+![pragmaClauseNORETURN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseNORETURN.png)
+
+##### pragmaClauseOUT
+![pragmaClauseOUT](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseOUT.png)
+
+##### pragmaClauseOWNER
+![pragmaClauseOWNER](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseOWNER.png)
+
+##### pragmaClausePACKED
+
+Pascal | Modula-2 | Oberon
+:---: | :---: | :---:
+✕ | ◯ | ◯
+
+![pragmaClausePACKED](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClausePACKED.png)
+
+##### pragmaClausePADBITS
+![pragmaClausePADBITS](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClausePADBITS.png)
+
+##### pragmaClausePRESETS
+![pragmaClausePRESETS](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClausePRESETS.png)
+
+##### identList
+![identList](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/identList.png)
+
+##### pragmaClausePRIVATETO
+![pragmaClausePRIVATETO](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClausePRIVATETO.png)
+
+##### pragmaClausePURE
+![pragmaClausePURE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClausePURE.png)
+
+##### pragmaClauseRANGE
+
+Pascal | Modula-2 | Oberon
+:---: | :---: | :---:
+✕ | ✕ | ◯
+
+![pragmaClauseRANGE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseRANGE.png)
+
+##### pragmaClauseRELEASE
+
+Pascal | Modula-2 | Oberon
+:---: | :---: | :---:
+✕ | ◯ | ✕
+
+![pragmaClauseRELEASE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseRELEASE.png)
+
+##### pragmaClauseRESIDENT
+![pragmaClauseRESIDENT](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseRESIDENT.png)
+
+##### pragmaClauseRETAIN
+
+Pascal | Modula-2 | Oberon
+:---: | :---: | :---:
+✕ | ◯ | ✕
+
+![pragmaClauseRETAIN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseRETAIN.png)
+
+##### pragmaClauseSINGLEASSIGN
+![pragmaClauseSINGLEASSIGN](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseSINGLEASSIGN.png)
+
+##### pragmaClauseTELL
+![pragmaClauseTELL](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseTELL.png)
+
+##### symbolInspection
+![symbolInspection](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/symbolInspection.png)
+
+##### pragmaInspection
+![pragmaInspection](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaInspection.png)
+
+##### pragmaTestExpr
+![pragmaTestExpr](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaTestExpr.png)
+
+##### pragmaValueExpr
+![pragmaValueExpr](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaValueExpr.png)
+
+##### userDefinedMsg
+![userDefinedMsg](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/userDefinedMsg.png)
+
+##### customMsg
+![customMsg](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/customMsg.png)
+
+##### msgText
+![msgText](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/msgText.png)
+
+##### altCustomMsg
+![altCustomMsg](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/altCustomMsg.png)
+
+##### pragmaDenoter
+![pragmaDenoter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaDenoter.png)
+
+##### pragmaClauseTICKET
+![pragmaClauseTICKET](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseTICKET.png)
+
+##### TicketNumber
+![TicketNumber](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/TicketNumber.png)
+
+##### TicketURL
+
+RFC3986 compliant URL
+
+##### pragmaClauseUNSET
+![pragmaClauseUNSET](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseUNSET.png)
+
+##### pragmaClauseVARIANT
+![pragmaClauseVARIANT](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseVARIANT.png)
+
+##### pragmaClauseVOLATILE
+![pragmaClauseVOLATILE](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseVOLATILE.png)
+
+##### pragmaClauseWEAK
+![pragmaClauseWEAK](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/pragmaClauseWEAK.png)
+
+### Implementation Defined Pragmas
+
+##### implDefPragmaClause
+![implDefPragmaClause](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/implDefPragmaClause.png)
+
+##### implDefPragmaDenoter
+![implDefPragmaDenoter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/implDefPragmaDenoter.png)
+
+##### implPrefix
+![implPrefix](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/implPrefix.png)
+
+##### implDefPragmaSymbol
+![implDefPragmaSymbol](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/implDefPragmaSymbol.png)
+
+#### Expressions
+
+##### inPragmaExpr
+![inPragmaExpr](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/inPragmaExpr.png)
+
+##### inPragmaSimpleExpr
+![inPragmaSimpleExpr](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/inPragmaSimpleExpr.png)
+
+##### inPragmaTerm
+![inPragmaTerm](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/inPragmaTerm.png)
+
+##### inPragmaSimpleTerm
+![inPragmaSimpleTerm](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/inPragmaSimpleTerm.png)
+
+##### inPragmaFactor
+![inPragmaFactor](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/inPragmaFactor.png)
+
+##### funcIdent
+![funcIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/funcIdent.png)
+
+
+### Terminal Symbols
+
+#### Identifiers
+
+##### StdIdent
+![StdIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/StdIdent.png)
+
+##### LetterOrDigit
+![LetterOrDigit](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/LetterOrDigit.png)
+
+##### TitleOrSnakeCaseIdent
+![TitleOrSnakeCaseIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/TitleOrSnakeCaseIdent.png)
+
+##### TitleCaseIdent
+![TitleCaseIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/TitleCaseIdent.png)
+
+##### SnakeCaseIdent
+![SnakeCaseIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/SnakeCaseIdent.png)
+
+##### LowerCaseIdent
+![LowerCaseIdent](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/LowerCaseIdent.png)
+
+
+#### Numeric Literals
+
+##### NumberLiteral
+![NumberLiteral](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/NumberLiteral.png)
+
+##### Digit
+![Digit](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/Digit.png)
+
+##### DigitPair
+![DigitPair](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/DigitPair.png)
+
+##### AddressLiteral
+![AddressLiteral](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/AddressLiteral.png)
+
+##### Base16DigitSeq
+![Base16DigitSeq](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/Base16DigitSeq.png)
+
+##### DigitOrAtoF
+![DigitOrAtoF](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/DigitOrAtoF.png)
+
+##### CharacterCode
+![CharacterCode](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/CharacterCode.png)
+
+
+#### Character Strings
+
+##### StringLiteral
+![StringLiteral](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/StringLiteral.png)
+
+##### SingleQuotedString
+![SingleQuotedString](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/SingleQuotedString.png)
+
+##### DoubleQuotedString
+![DoubleQuotedString](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/DoubleQuotedString.png)
+
+##### QuotableCharacter
+![QuotableCharacter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/QuotableCharacter.png)
+
+##### Letter
+![Letter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/Letter.png)
+
+##### Space
+
+ASCII/ISO646 character with code point `U+0020`
+
+##### EscapedCharacter
+![EscapedCharacter](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/EscapedCharacter.png)
+
+##### NonAlphaNumQuotable
+`"!"`, `"#"`, `"$"`, `"%"`, `"&"`, `"("`, `")"`, `"*"`, `"+"`, `","`,<br>
+`"-"`, `"."`, `"/"`, `":"`, `";"`, `"<"`, `"="`, `">"`, `"?"`, `"@"`,<br>
+`"["`, `"]"`, `"^"`, `"_"`, ``"`"``, `"{"`, `"}"`, `"|"`, `"~"`
+
+##### ExtUnicodeCharacter
+
+Unicode characters with code points above `U+009F`
+
+
+#### Ignore Symbols
+
+##### Whitespace
+![Whitespace](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/Whitespace.png)
+
+##### Tabulator
+
+ASCII/ISO646 control character with code point `U+09`
+
+##### EndOfLine
+![EndOfLine](https://github.com/trijezdci/Pragma-Syntax-Diagrams/blob/main/img/EndOfLine.png)
+
+##### CR
+ASCII/ISO646 control character with code point `U+0D`
+
+##### LF
+
+ASCII/ISO646 control character with code point `U+0A`
+
+
+[END OF FILE]
