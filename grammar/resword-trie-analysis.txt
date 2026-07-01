@@ -1,0 +1,132 @@
+Reserved Word Trie Analysis
+
+Length=2
+
+0 1
+C|G
+I|N
+---
+0 0
+*
+
+
+Length=3
+
+0 1 2
+A|B|I
+A|N|D
+A|R|C
+D|I|V
+F|F|I
+M|O|D
+M|S|G
+N|O|T
+O|U|T
+-----
+3 1 3
+  *
+
+
+Length=4
+
+0 1 2 3
+A|D|D|R
+D|E|T|M
+F|R|O|M
+I|N|F|O
+P|U|R|E
+T|E|L|L
+W|A|R|N
+W|E|A|K
+-------
+1 2 1 1
+*
+
+
+Length=5
+
+0 1 2 3 4
+A|L|I|G|N
+E|R|R|O|R
+F|A|T|A|L
+O|W|N|E|R
+R|A|N|G|E
+U|N|S|E|T
+---------
+0 1 1 2 1
+*
+
+
+Length=6
+
+0 1 2 3 4 5
+E|N|D|F|W|D
+I|N|L|I|N|E
+P|A|C|K|E|D
+R|E|T|A|I|N
+T|I|C|K|E|T
+-----------
+0 1 1 1 1 1
+*
+
+
+Length=7
+
+0 1 2 3 4 5 6
+F|F|I|D|E|N|T
+F|O|R|W|A|R|D
+P|A|D|B|I|T|S
+P|R|E|S|E|T|S
+R|E|L|E|A|S|E
+V|A|R|I|A|N|T
+-------------
+2 1 1 0 3 2 2
+      *
+
+
+Length=8
+
+0 1 2 3 4 5 6 7
+A|N|Y|O|R|D|E|R
+B|O|R|R|O|W|E|R
+E|N|C|O|D|I|N|G
+M|E|M|A|L|I|G|N
+N|O|I|N|L|I|N|E
+N|O|R|E|T|U|R|N
+R|E|S|I|D|E|N|T
+V|O|L|A|T|I|L|E
+---------------
+1 5 1 2 3 3 3 3
+*
+
+
+Length=9
+
+0 1 2 3 4 5 6 7 8
+G|E|N|E|R|A|T|E|D
+P|R|I|V|A|T|E|T|O
+-----------------
+0 0 0 0 0 0 0 0 0
+*
+
+
+Length=10
+
+0 1 2 3 4 5 6 7 8 9
+C|O|N|T|I|G|U|O|U|S
+D|E|P|R|E|C|A|T|E|D
+L|O|W|L|A|T|E|N|C|Y
+-------------------
+0 1 0 0 0 0 0 0 0 0
+*
+
+
+Length=12
+
+0 1 2 3 4 5 6 7 8 9 0 1
+S|I|N|G|L|E|A|S|S|I|G|N
+-----------------------
+0 0 0 0 0 0 0 0 0 0 0 0
+*
+
+END OF FILE
