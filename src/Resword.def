@@ -1,0 +1,27 @@
+(*!m2pim*) (* Copyright (c) 2026 B.Kowarsch. All rights reserved. *)
+
+IMPLEMENTATION MODULE Resword;
+
+FROM Token IMPORT TokenT;
+FROM String IMPORT StringT;
+
+
+VAR (* use read-only *)
+  abi, addr, align, and, anyorder, arc, borrower, contiguous, deprecated,
+  detm, div, encoding, endfwd, error, fatal, ffi, ffident, forward, from,
+  gc, generated, in, info, inline, leadmits, lowlatency, memalign, mod,
+  msg, noinline, noreturn, not, or, out, owner, packed, padbits, presets,
+  privateto, pure, range, release, resident, retain, singleassign, tell,
+  ticket, unset, variant, volatile, warn, weak : StringT;
+
+
+PROCEDURE tokenForLexeme ( lexeme : StringT; defaultToken : TokenT ) : TokenT;
+(* If lexeme represents a reserved word, its corresponding reserved word's
+   token is returned, otherwise the value of defaultToken is returned. *)
+
+
+PROCEDURE lexemeForToken ( token : TokenT ) : StringT;
+(* If token represents a reserved word, an interned string with its
+   corresponding lexeme is returned, otherwise NIL is returned. *)
+
+END Resword.
