@@ -218,7 +218,7 @@ PROCEDURE foo ( bar : Bar ) : Baz <*DETM*> ; (* will not read but may modify non
 
 ### Pragma ENCODING ###
 
-Pragma `ENCODING` specifies the character encoding of the enclosing source file.
+Pragma `ENCODING` specifies the character encoding of the enclosing source file. It does not impose semantics how characters are stored and processed.
 
 ```antlr
 pragmaENCODING := ’<*’ ENCODING '=' ( '"ASCII"' | '"UTF8"' ) ( ':' codePointSampleList )? ’*>’ ;
@@ -247,6 +247,24 @@ The pragma controls which characters are permitted within quoted literals and co
 
 An implementation that supports ASCII only, shall recognise encoding specifier `ASCII` and ignore any UTF8 BOM but reject any non-ASCII characters within the source file. An implementation that supports UTF8 shall recognise encoding specifiers `ASCII` and `UTF8`. Support for any other encodings is implementation defined. Only one encoding pragma per source file is permitted.
 
+If any unsupported or unknown encoding specifier is encountered, the implementation shall abort and emit a fatal error message.
+
+
+#### Encoding Specifiers for Legacy Support
+
+To aid code portability, implementations that support legacy character encodings should use legacy encoding specifiers reserved for this purpose. 
+
+| Encoding Specifier | Alias | Purpose | Legacy Usage |
+| :--- | :--- | :--- | :--- |
+| `"EBCDIC"` | *None* | EBCDIC (Host-dependent default) | IBM Mainframe (OS/390) and Midrange (OS/400) systems |
+| `"ISO-8859-1"` | `"Latin-1"` | ISO/IEC 8859-1 (Western European) | Project Oberon |
+| `"ISO-8859-2"` | `"Latin-2"` | ISO/IEC 8859-2 (Central European) | Unix and Linux systems |
+| `"ISO-8859-5"` | *None* | ISO/IEC 8859-5 (Cyrillic) | ISO standard 8-bit Cyrillic systems |
+| `"CP-1250"` | `"Windows-1250"` | Windows-1250 (Central European) | Windows systems |
+| `"CP-1251"` | `"Windows-1251"` | Windows-1251 (Cyrillic) | Oberon and Component Pascal on Windows |
+| `"KOI8-R"` | *None* | KOI8-R (Cyrillic) | Soviet-era Encoding for Unix and BSD systems |
+
+
 #### Encoding Verification ####
 
 The encoding specifier may be followed by a comma separated list of arbitrary code point samples. Each sample consists of a quoted character and its respective character code. If samples are chosen wisely, three or four samples will suffice to verify the encoding with near 100% certainty. Such a sample list for UTF8 is given in the example below.
@@ -255,7 +273,7 @@ The encoding specifier may be followed by a comma separated list of arbitrary co
 <*ENCODING="UTF8" : "é"=0uE9, "€"=0u20AC, "¥"=0uA5, "§"=0uA7*>
 ```
 
-If a sample list is specified, a verification shall be carried out by matching the quoted literals in the sample list with their respective character codes. Any mismatch shall cause a fatal compilation error and abort. A list shall not contain more than eight samples. Excess samples shall be ignored and a warning shall be emitted.
+If a sample list is specified, a verification shall be carried out by matching the quoted literals in the sample list with their respective character codes. Any mismatch shall cause a fatal compilation error and abort. A list shall not contain more than eight samples. Excess samples shall be ignored and a warning shall be emitted. 
 
 
 ### Pragma ENDFWD ###
