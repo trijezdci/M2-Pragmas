@@ -1,2 +1,3 @@
 *.def linguist-language=Modula-2 linguist-detectable=true
-*.if linguist-language=Modula-2 linguist-detectable=true
+*.mod linguist-language=Modula-2 linguist-detectable=true
+*.gll linguist-language=ANTLR linguist-detectable=true
