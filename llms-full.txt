@@ -272,6 +272,20 @@ The pragma controls which characters are permitted within quoted literals and co
 
 An implementation that supports ASCII only, shall recognise encoding specifier `ASCII` and ignore any UTF8 BOM but reject any non-ASCII characters within the source file. An implementation that supports UTF8 shall recognise encoding specifiers `ASCII` and `UTF8`. Support for any other encodings is implementation defined. Only one encoding pragma per source file is permitted.
 
+#### Encoding Specifiers for Legacy Support
+
+To aid code portability, implementations that support legacy character encodings should use legacy encoding specifiers reserved for this purpose. 
+
+| Encoding Specifier | Alias | Purpose | Legacy Usage |
+| :--- | :--- | :--- | :--- |
+| `"EBCDIC"` | *None* | EBCDIC (Host-dependent default) | IBM Mainframe (OS/390) and Midrange (OS/400) systems |
+| `"ISO-8859-1"` | `"Latin-1"` | ISO/IEC 8859-1 (Western European) | Project Oberon |
+| `"ISO-8859-2"` | `"Latin-2"` | ISO/IEC 8859-2 (Central European) | Unix and Linux systems |
+| `"ISO-8859-5"` | *None* | ISO/IEC 8859-5 (Cyrillic) | ISO standard 8-bit Cyrillic systems |
+| `"CP-1250"` | `"Windows-1250"` | Windows-1250 (Central European) | Windows systems |
+| `"CP-1251"` | `"Windows-1251"` | Windows-1251 (Cyrillic) | Oberon and Component Pascal on Windows |
+| `"KOI8-R"` | *None* | KOI8-R (Cyrillic) | Soviet-era Encoding for Unix and BSD systems |
+
 ##### Encoding Verification
 
 The encoding specifier may be followed by a comma separated list of arbitrary code point samples. Each sample consists of a quoted character and its respective character code. If samples are chosen wisely, three or four samples will suffice to verify the encoding with near 100% certainty. Such a sample list for UTF8 is given in the example below.
