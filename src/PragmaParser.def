@@ -1,0 +1,43 @@
+(*!m2pim*) (* Copyright (c) 2026 B.Kowarsch. All rights reserved. *)
+
+DEFINITION MODULE PragmaParser;
+
+(* Parser for Portable Pragmas *)
+
+
+FROM String IMPORT StringT;
+
+
+(* Return Status *)
+
+TYPE Status = ( Success, Failure );
+
+
+(* Result Summary *)
+
+TYPE Statistics = RECORD
+  lexicalWarnings,
+  lexicalErrors,
+  syntaxWarnings,
+  syntaxErrors : CARDINAL;
+END;
+
+
+(* Operations *)
+
+(* --------------------------------------------------------------------------
+ * public function parsePragmaBlock(source, stats, status)
+ * --------------------------------------------------------------------------
+ * Parses rule pragmaBlock and builds a pragma list.  Returns the pragma list
+ * on success or NIL on failure.
+ *
+ * pragmaBlock :=
+ *   startDelim pragmaBody endDelim
+ *   ;
+ * --------------------------------------------------------------------------
+ *)
+PROCEDURE parsePragmaBlock
+  ( source : StringT; VAR stats : Statistics; VAR status : Status ) : PragmaList;
+
+
+END PragmaParser.
