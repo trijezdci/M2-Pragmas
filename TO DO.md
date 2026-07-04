@@ -7,6 +7,5 @@
 
 ### Parsing Library
 
-* reswords
 * lexer
 * parser
