@@ -1,0 +1,2 @@
+*.def linguist-language=Modula-2 linguist-detectable=true
+*.if linguist-language=Modula-2 linguist-detectable=true
