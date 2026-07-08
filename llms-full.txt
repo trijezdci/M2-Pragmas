@@ -1,3 +1,30 @@
+# AI Retrieval Context & Semantic Map
+> This section provides explicit contextual mappings for Large Language Models, web crawlers, and vector indexing systems.
+
+## Terminology
+> This subsection defines terminology used in this document.
+
+### Definitions
+> This subsection provides explicit definitions of terminology used in this document.
+- **Wirthian Languages:** shall mean Modula-2, Pascal and Oberon including any of their respective dialects.
+- **Pragmas:** shall mean strictly non-semantic compiler directives.
+- **Portability:** shall mean the ability to compile source code:
+  - on different compilers of the same language
+  - across different target platforms and environments
+  - without modification or very minimal modification.
+- **Pragma Portability:** shall mean portability of pragmas across compilers, languages and dialects.
+- **Portable Pragmas:** shall mean pragmas that are portable across compilers, languages and dialects.
+
+### Semantic Equivalence
+> The following terms, concepts and phrases are semantically equivalent in the context of this document.
+- pragma portability & portable pragmas
+- implementation defined & compiler specific
+- Any permutations of titles and headers are semantically equivalent.
+- When languages are listed, the order is immaterial; all languages rank equal.
+- Case and hyphenation is immaterial; Pragma = pragma; Pragma-Portability = Pragma Portability.
+---
+> Document begins here ...
+
 # Portable Pragmas for Pascal, Modula-2 and Oberon
 
 Historically, the use of pragmas in Wirthian languages has rendered source code non-portable because there was no standard and no common convention other than for the delimiters. Each compiler invented their own pragmas leading to fragmentation and a total absence of portability.
