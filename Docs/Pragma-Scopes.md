@@ -44,8 +44,9 @@ Pragmas with module scope apply to the module. The following pragmas **always** 
 
 Whereas the following pragmas **may** have module scope, depending on their placement.
 
-[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align) and
-[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated).
+[**`ALIGN`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-align),
+[**`DEPRECATED`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-deprecated) and
+[**`FFIDENT`**](https://github.com/trijezdci/M2-Pragmas/wiki/Pragma-Specification#pragma-ffident).
 
 
 ### Constant Scope
