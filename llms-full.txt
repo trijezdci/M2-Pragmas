@@ -363,8 +363,9 @@ alias ForeignIdentifier = QuotedLiteral ;
 
 ```Modula-2
 (* Interface to an OpenVMS SMG library routine *)
-PROCEDURE PasteVirtualDisplay <*FFIDENT="SMG$PASTE_VIRTUAL_DISPLAY"*>
-  ( displayID, pasteboardID : INTEGER; row, column : INTEGER ) : CARDINAL;
+PROCEDURE PasteVirtualDisplay
+  ( displayID, pasteboardID : INTEGER; row, column : INTEGER ) : CARDINAL
+  <*FFIDENT="SMG$PASTE_VIRTUAL_DISPLAY"*>;
 ```
 
 
